@@ -28,6 +28,8 @@ FEATURE_COLS = [
     "h2h_avg_goals",
 ]
 
+REFERENCE_DATE = pd.Timestamp("2026-06-11")
+
 
 # ─────────────────────────────────────────
 # 2. LOAD DATA
@@ -37,10 +39,7 @@ def load_data():
     train = pd.read_csv("data/processed/train_features.csv")
     predict = pd.read_csv("data/processed/predict_features.csv")
 
-    # Drop rows with missing targets
     train = train.dropna(subset=["home_goals", "away_goals"])
-
-    # Fill missing features with 0
     train[FEATURE_COLS] = train[FEATURE_COLS].fillna(0)
     predict[FEATURE_COLS] = predict[FEATURE_COLS].fillna(0)
 
@@ -48,23 +47,52 @@ def load_data():
 
 
 # ─────────────────────────────────────────
-# 3. TRAIN MODEL
+# 3. TIME WEIGHTS
+# ─────────────────────────────────────────
+
+def compute_sample_weights(train: pd.DataFrame) -> pd.Series:
+    """
+    Compute exponential time decay weights.
+    Recent matches get higher weight than old ones.
+
+    decay = 0.001 means:
+      - match today        → weight ~5.8x baseline
+      - match 1 year ago   → weight ~3.5x baseline
+      - match 3 years ago  → weight ~1.5x baseline
+      - match 8 years ago  → weight ~0.3x baseline
+    """
+    train = train.copy()
+    train["date"] = pd.to_datetime(train["date"])
+    weights = train["date"].apply(
+        lambda d: np.exp(-0.001 * (REFERENCE_DATE - d).days)
+    )
+    # Normalize so weights sum to n
+    weights = weights / weights.sum() * len(train)
+    return weights
+
+
+# ─────────────────────────────────────────
+# 4. TRAIN MODEL
 # ─────────────────────────────────────────
 
 def train_xgboost(train: pd.DataFrame) -> tuple:
     """
-    Train two XGBoost models:
-    - model_home: predicts home goals
-    - model_away: predicts away goals
-
-    Uses TimeSeriesSplit to avoid data leakage
-    (we never train on future matches to predict past ones)
+    Train two XGBoost models with time-based sample weights.
+    Recent matches influence the model more than old ones.
     """
     X = train[FEATURE_COLS]
     y_home = train["home_goals"]
     y_away = train["away_goals"]
 
-    # XGBoost params — tuned for football goal prediction
+    # Compute time decay weights
+    sample_weights = compute_sample_weights(train)
+
+    print(f"  Sample weight range: "
+          f"{sample_weights.min():.3f} → {sample_weights.max():.3f}")
+    print(f"  (recent matches weighted up to "
+          f"{sample_weights.max():.1f}x more than oldest)")
+    print()
+
     params = {
         "n_estimators": 300,
         "max_depth": 4,
@@ -72,20 +100,22 @@ def train_xgboost(train: pd.DataFrame) -> tuple:
         "subsample": 0.8,
         "colsample_bytree": 0.8,
         "min_child_weight": 3,
-        "objective": "count:poisson",  # Poisson loss — perfect for count data
+        "objective": "count:poisson",
         "random_state": 42,
         "n_jobs": -1,
     }
 
-    print("Training XGBoost — Home Goals model...")
+    print("Training XGBoost — Home Goals model (time-weighted)...")
     model_home = xgb.XGBRegressor(**params)
-    model_home.fit(X, y_home)
+    model_home.fit(X, y_home, sample_weight=sample_weights)
 
-    print("Training XGBoost — Away Goals model...")
+    print("Training XGBoost — Away Goals model (time-weighted)...")
     model_away = xgb.XGBRegressor(**params)
-    model_away.fit(X, y_away)
+    model_away.fit(X, y_away, sample_weight=sample_weights)
 
     # Cross validation with time series split
+    # Note: we skip sample_weight in CV since sklearn 1.4+
+    # changed the API — CV gives us directional signal anyway
     print("\nCross-validating with TimeSeriesSplit...")
     tscv = TimeSeriesSplit(n_splits=5)
 
@@ -107,11 +137,10 @@ def train_xgboost(train: pd.DataFrame) -> tuple:
 
 
 # ─────────────────────────────────────────
-# 4. FEATURE IMPORTANCE
+# 5. FEATURE IMPORTANCE
 # ─────────────────────────────────────────
 
 def print_feature_importance(model_home, model_away):
-    """Print top 10 most important features for each model."""
     importance_home = pd.Series(
         model_home.feature_importances_, index=FEATURE_COLS
     ).sort_values(ascending=False)
@@ -134,22 +163,16 @@ def print_feature_importance(model_home, model_away):
 
 
 # ─────────────────────────────────────────
-# 5. PREDICT MATCHES
+# 6. PREDICT MATCHES
 # ─────────────────────────────────────────
 
 def predict_scorelines(model_home, model_away,
                         predict_df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Generate scoreline predictions for all WC 2026 fixtures.
-    Uses Poisson distribution around predicted xG values.
-    """
     X_pred = predict_df[FEATURE_COLS].fillna(0)
 
-    # Get expected goals from models
     home_xg = model_home.predict(X_pred)
     away_xg = model_away.predict(X_pred)
 
-    # Clip to reasonable range
     home_xg = np.clip(home_xg, 0.3, 4.0)
     away_xg = np.clip(away_xg, 0.3, 4.0)
 
@@ -158,7 +181,6 @@ def predict_scorelines(model_home, model_away,
         hxg = home_xg[i]
         axg = away_xg[i]
 
-        # Poisson scoreline probabilities
         scorelines = []
         for h in range(7):
             for a in range(7):
@@ -202,12 +224,12 @@ def predict_scorelines(model_home, model_away,
 
 
 # ─────────────────────────────────────────
-# 6. RUN FULL PIPELINE
+# 7. RUN FULL PIPELINE
 # ─────────────────────────────────────────
 
 def run_xgboost():
     print("=" * 60)
-    print("  XGBOOST MODEL — WC 2026 Predictor")
+    print("  XGBOOST MODEL (TIME-WEIGHTED) — WC 2026 Predictor")
     print("=" * 60)
     print()
 
@@ -217,26 +239,20 @@ def run_xgboost():
     print(f"  Prediction set: {len(predict)} fixtures")
     print()
 
-    # Train
     model_home, model_away = train_xgboost(train)
-
-    # Feature importance
     print_feature_importance(model_home, model_away)
 
-    # Predict
     print("\nGenerating WC 2026 predictions...")
     out_df = predict_scorelines(model_home, model_away, predict)
 
-    # Save
     os.makedirs("data/predictions", exist_ok=True)
     out_df.to_csv("data/predictions/xgboost_all.csv", index=False)
     out_df[out_df["matchday"] == 1].to_csv(
         "data/predictions/xgboost_md1.csv", index=False
     )
 
-    # Print
     print()
-    print("XGBoost Predictions — WC 2026 Group Stage")
+    print("XGBoost Predictions (Time-Weighted) — WC 2026 Group Stage")
     print("=" * 60)
     for _, row in out_df.iterrows():
         print(

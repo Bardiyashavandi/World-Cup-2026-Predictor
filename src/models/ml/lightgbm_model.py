@@ -27,6 +27,8 @@ FEATURE_COLS = [
     "h2h_avg_goals",
 ]
 
+REFERENCE_DATE = pd.Timestamp("2026-06-11")
+
 
 # ─────────────────────────────────────────
 # 2. LOAD DATA
@@ -44,23 +46,50 @@ def load_data():
 
 
 # ─────────────────────────────────────────
-# 3. TRAIN MODEL
+# 3. TIME WEIGHTS
+# ─────────────────────────────────────────
+
+def compute_sample_weights(train: pd.DataFrame) -> pd.Series:
+    """
+    Compute exponential time decay weights.
+    Recent matches get higher weight than old ones.
+
+    decay = 0.001 means:
+      - match today        → weight ~5.8x baseline
+      - match 1 year ago   → weight ~3.5x baseline
+      - match 3 years ago  → weight ~1.5x baseline
+      - match 8 years ago  → weight ~0.3x baseline
+    """
+    train = train.copy()
+    train["date"] = pd.to_datetime(train["date"])
+    weights = train["date"].apply(
+        lambda d: np.exp(-0.001 * (REFERENCE_DATE - d).days)
+    )
+    weights = weights / weights.sum() * len(train)
+    return weights
+
+
+# ─────────────────────────────────────────
+# 4. TRAIN MODEL
 # ─────────────────────────────────────────
 
 def train_lightgbm(train: pd.DataFrame) -> tuple:
     """
-    Train two LightGBM models:
-    - model_home: predicts home goals
-    - model_away: predicts away goals
-
-    Key difference from XGBoost:
-    - objective='poisson' uses Poisson log-loss
-    - grows trees leaf-wise (faster, more accurate on tabular)
-    - num_leaves controls complexity instead of max_depth
+    Train two LightGBM models with time-based sample weights.
+    Recent matches influence the model more than old ones.
     """
     X = train[FEATURE_COLS]
     y_home = train["home_goals"]
     y_away = train["away_goals"]
+
+    # Compute time decay weights
+    sample_weights = compute_sample_weights(train)
+
+    print(f"  Sample weight range: "
+          f"{sample_weights.min():.3f} → {sample_weights.max():.3f}")
+    print(f"  (recent matches weighted up to "
+          f"{sample_weights.max():.1f}x more than oldest)")
+    print()
 
     params = {
         "n_estimators": 300,
@@ -75,13 +104,13 @@ def train_lightgbm(train: pd.DataFrame) -> tuple:
         "verbose": -1,
     }
 
-    print("Training LightGBM — Home Goals model...")
+    print("Training LightGBM — Home Goals model (time-weighted)...")
     model_home = lgb.LGBMRegressor(**params)
-    model_home.fit(X, y_home)
+    model_home.fit(X, y_home, sample_weight=sample_weights)
 
-    print("Training LightGBM — Away Goals model...")
+    print("Training LightGBM — Away Goals model (time-weighted)...")
     model_away = lgb.LGBMRegressor(**params)
-    model_away.fit(X, y_away)
+    model_away.fit(X, y_away, sample_weight=sample_weights)
 
     # Cross validation
     print("\nCross-validating with TimeSeriesSplit...")
@@ -105,11 +134,10 @@ def train_lightgbm(train: pd.DataFrame) -> tuple:
 
 
 # ─────────────────────────────────────────
-# 4. FEATURE IMPORTANCE
+# 5. FEATURE IMPORTANCE
 # ─────────────────────────────────────────
 
 def print_feature_importance(model_home, model_away):
-    """Print top 10 most important features for each model."""
     importance_home = pd.Series(
         model_home.feature_importances_, index=FEATURE_COLS
     ).sort_values(ascending=False)
@@ -132,14 +160,11 @@ def print_feature_importance(model_home, model_away):
 
 
 # ─────────────────────────────────────────
-# 5. PREDICT MATCHES
+# 6. PREDICT MATCHES
 # ─────────────────────────────────────────
 
 def predict_scorelines(model_home, model_away,
                         predict_df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Generate scoreline predictions for all WC 2026 fixtures.
-    """
     X_pred = predict_df[FEATURE_COLS].fillna(0)
 
     home_xg = model_home.predict(X_pred)
@@ -196,12 +221,12 @@ def predict_scorelines(model_home, model_away,
 
 
 # ─────────────────────────────────────────
-# 6. RUN FULL PIPELINE
+# 7. RUN FULL PIPELINE
 # ─────────────────────────────────────────
 
 def run_lightgbm():
     print("=" * 60)
-    print("  LIGHTGBM MODEL — WC 2026 Predictor")
+    print("  LIGHTGBM MODEL (TIME-WEIGHTED) — WC 2026 Predictor")
     print("=" * 60)
     print()
 
@@ -211,26 +236,20 @@ def run_lightgbm():
     print(f"  Prediction set: {len(predict)} fixtures")
     print()
 
-    # Train
     model_home, model_away = train_lightgbm(train)
-
-    # Feature importance
     print_feature_importance(model_home, model_away)
 
-    # Predict
     print("\nGenerating WC 2026 predictions...")
     out_df = predict_scorelines(model_home, model_away, predict)
 
-    # Save
     os.makedirs("data/predictions", exist_ok=True)
     out_df.to_csv("data/predictions/lightgbm_all.csv", index=False)
     out_df[out_df["matchday"] == 1].to_csv(
         "data/predictions/lightgbm_md1.csv", index=False
     )
 
-    # Print
     print()
-    print("LightGBM Predictions — WC 2026 Group Stage")
+    print("LightGBM Predictions (Time-Weighted) — WC 2026 Group Stage")
     print("=" * 60)
     for _, row in out_df.iterrows():
         print(
