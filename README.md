@@ -37,10 +37,10 @@ The system is **iterative** — after each matchday it ingests real results, upd
     │              9 Prediction Models             │
     │                                              │
     │  Statistical:       ML:          Specialist: │
-    │  ├─ Static ELO      ├─ XGBoost   └─ Stakes  │
-    │  ├─ Dixon-Coles     ├─ LightGBM             │
-    │  ├─ Hist. Average   ├─ Neural Net           │
-    │  └─ Dynamic ELO     └─ Logistic Reg         │
+    │  ├─ Static ELO      ├─ XGBoost   └─ Stakes   │
+    │  ├─ Dixon-Coles     ├─ LightGBM              │
+    │  ├─ Hist. Average   ├─ Neural Net            │
+    │  └─ Dynamic ELO     └─ Logistic Reg          │
     └──────────────────────────────────────────────┘
            ↓
     Weighted Ensemble (matchday-aware weights)
