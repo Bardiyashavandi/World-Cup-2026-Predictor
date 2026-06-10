@@ -1,0 +1,25 @@
+match_id,group,matchday,home_team,away_team,home_xg,away_xg,predicted_home_goals,predicted_away_goals,home_win_prob,draw_prob,away_win_prob,agreement_pct
+3,A,2,Czech Republic,South Africa,1.495,0.829,1,0,0.513,0.271,0.214,55.6
+4,A,2,Mexico,South Korea,1.319,0.751,1,0,0.481,0.312,0.206,66.7
+9,B,2,Switzerland,Bosnia,1.653,0.734,1,0,0.571,0.257,0.17,55.6
+10,B,2,Canada,Qatar,1.861,0.491,1,0,0.662,0.221,0.11,88.9
+15,C,2,Scotland,Morocco,1.112,1.19,1,1,0.337,0.296,0.366,77.8
+16,C,2,Brazil,Haiti,1.765,0.721,1,0,0.615,0.235,0.147,66.7
+21,D,2,USA,Australia,1.274,0.978,1,0,0.427,0.291,0.281,33.3
+22,D,2,Turkey,Paraguay,1.46,1.019,1,1,0.454,0.279,0.265,66.7
+27,E,2,Germany,Cote d'Ivoire,1.662,0.821,1,0,0.549,0.266,0.181,55.6
+28,E,2,Ecuador,Curaçao,1.784,0.692,1,0,0.614,0.231,0.151,66.7
+33,F,2,Netherlands,Sweden,1.781,0.712,1,0,0.612,0.245,0.138,77.8
+34,F,2,Tunisia,Japan,0.72,1.214,0,1,0.224,0.314,0.46,44.4
+39,G,2,Belgium,Iran,1.569,0.909,1,0,0.502,0.264,0.231,66.7
+40,G,2,New Zealand,Egypt,0.965,1.278,0,1,0.278,0.293,0.429,66.7
+45,H,2,Spain,Saudi Arabia,2.231,0.508,2,0,0.739,0.175,0.073,100.0
+46,H,2,Uruguay,Cape Verde,1.585,0.726,1,0,0.566,0.256,0.176,55.6
+51,I,2,France,Iraq,1.804,0.699,1,0,0.625,0.23,0.141,88.9
+52,I,2,Norway,Senegal,1.223,1.022,1,1,0.392,0.304,0.303,77.8
+57,J,2,Argentina,Austria,1.635,0.736,1,0,0.574,0.254,0.17,55.6
+58,J,2,Jordan,Algeria,1.132,1.205,1,1,0.342,0.291,0.366,77.8
+63,K,2,Portugal,Uzbekistan,1.845,0.772,1,0,0.602,0.233,0.16,77.8
+64,K,2,Colombia,DR Congo,1.494,0.713,1,0,0.552,0.27,0.176,66.7
+69,L,2,England,Ghana,1.954,0.504,1,0,0.692,0.214,0.089,88.9
+70,L,2,Panama,Croatia,0.922,1.301,0,1,0.262,0.302,0.435,44.4
