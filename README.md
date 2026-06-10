@@ -442,6 +442,8 @@ The prior is strong (weight=10) so one match does not dramatically change estima
     │       └── bayesian_updater.py
     ├── dashboard/
     │   └── app.py                          ← Streamlit 5-page dashboard
+    ├── docs/
+    │   └── index.html                      ← shareable predictions board (GitHub Pages)
     ├── notebooks/
     │   └── eda.ipynb                       ← exploratory analysis
     ├── tests/
@@ -471,6 +473,7 @@ Or run the important files one by one (in this order):
 | 3. Run a model | `python3 src/models/ml/xgboost_model.py` | Runs one model (swap in any file from `src/models/`) |
 | 4. Combine models | `python3 src/ensemble/ensemble.py 1` | Builds the final ensemble for matchday 1 (use 2 or 3 for later rounds) |
 | 5. See the dashboard | `streamlit run dashboard/app.py` | Opens the interactive predictor in your browser |
+| 5b. Build the board | `python3 src/viz/build_board.py` | Generates `docs/index.html` — a shareable predictions board (hostable on GitHub Pages) |
 | 6. Check accuracy | `python3 src/evaluation/backtest.py` | Backtests every model on WC 2018 + 2022 |
 | 7. Run the tests | `pytest tests/` | Quick checks that everything is working |
 

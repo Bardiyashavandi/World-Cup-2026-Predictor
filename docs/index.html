@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World Cup 2026 — Match Predictions</title>
+<style>
+  :root {
+    --bg:#0e1117; --panel:#161d2b; --panel2:#1d2636; --line:#2a3446;
+    --text:#f4f6fb; --muted:#9aa7bd; --green:#2ecc71; --amber:#f1b53d;
+    --red:#e6584a;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; background:
+      radial-gradient(1200px 600px at 50% -10%, #16321f 0%, transparent 60%),
+      var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    padding:32px 18px 60px;
+  }
+  .wrap { max-width:1080px; margin:0 auto; }
+  header { text-align:center; margin-bottom:8px; }
+  h1 { font-size:30px; margin:0 0 6px; letter-spacing:.3px; }
+  .sub { color:var(--muted); font-size:14px; }
+  .pill { display:inline-block; background:rgba(46,204,113,.14);
+    color:var(--green); border:1px solid rgba(46,204,113,.35);
+    padding:3px 10px; border-radius:999px; font-size:12px; margin-top:10px; }
+  .tabs { display:flex; gap:8px; justify-content:center; margin:22px 0 26px; flex-wrap:wrap; }
+  .tab { background:var(--panel); color:var(--muted); border:1px solid var(--line);
+    padding:9px 18px; border-radius:999px; cursor:pointer; font-size:14px;
+    font-weight:600; transition:.15s; }
+  .tab:hover { color:var(--text); }
+  .tab.active { background:var(--green); color:#06210f; border-color:var(--green); }
+  .groups { display:grid; grid-template-columns:repeat(auto-fill,minmax(345px,1fr));
+    gap:16px; }
+  .group { background:var(--panel); border:1px solid var(--line);
+    border-radius:14px; overflow:hidden; }
+  .group h2 { margin:0; padding:11px 16px; font-size:13px; letter-spacing:1.5px;
+    text-transform:uppercase; color:var(--muted);
+    background:var(--panel2); border-bottom:1px solid var(--line); }
+  .match { padding:13px 16px; border-bottom:1px solid var(--line); }
+  .match:last-child { border-bottom:none; }
+  .row { display:flex; align-items:center; gap:10px; }
+  .team { display:flex; align-items:center; gap:8px; font-size:14px; font-weight:600;
+    flex:1 1 0; min-width:0; }
+  .team .flag { font-size:18px; flex:none; }
+  .team.away { flex-direction:row-reverse; text-align:right; }
+  .name { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
+  .score { flex:none; white-space:nowrap; font-size:19px; font-weight:800;
+    padding:2px 12px; border-radius:8px; background:var(--panel2); text-align:center; }
+  .score.h { color:var(--green); } .score.d { color:var(--amber); } .score.a { color:var(--red); }
+  .bar { display:flex; height:9px; border-radius:6px; overflow:hidden; margin:11px 0 6px; }
+  .bar i { display:block; }
+  .bar .h { background:var(--green); } .bar .d { background:var(--amber); } .bar .a { background:var(--red); }
+  .legend { display:flex; justify-content:space-between; font-size:11.5px; color:var(--muted); }
+  .legend b { color:var(--text); font-weight:700; }
+  .conf { float:right; font-size:11px; padding:1px 8px; border-radius:999px;
+    margin-top:8px; font-weight:700; }
+  .conf.hi { background:rgba(46,204,113,.16); color:var(--green); }
+  .conf.md { background:rgba(241,181,61,.16); color:var(--amber); }
+  .conf.lo { background:rgba(154,167,189,.16); color:var(--muted); }
+  footer { text-align:center; color:var(--muted); font-size:12px; margin-top:32px; line-height:1.6; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>⚽ FIFA World Cup 2026 — Match Predictions</h1>
+    <div class="sub">Ensemble of 9 models · ~56% backtested result accuracy · host USA · Canada · Mexico</div>
+    <div class="pill">Green = home win · Amber = draw · Red = away win</div>
+  </header>
+  <div class="tabs" id="tabs"></div>
+  <div class="groups" id="board"></div>
+  <footer>
+    Predictions are model output, not certainties — the underlying expected goals drive each call.<br>
+    Built from <code>data/predictions/ensemble_md*.csv</code>.
+  </footer>
+</div>
+<script>
+const MATCHES = [{"md": 1, "group": "A", "home": "Mexico", "away": "South Africa", "hf": "🇲🇽", "af": "🇿🇦", "hg": 1, "ag": 0, "hp": 62, "dp": 24, "ap": 14, "conf": 88}, {"md": 1, "group": "A", "home": "South Korea", "away": "Czech Republic", "hf": "🇰🇷", "af": "🇨🇿", "hg": 1, "ag": 1, "hp": 45, "dp": 25, "ap": 30, "conf": 75}, {"md": 1, "group": "B", "home": "Canada", "away": "Bosnia", "hf": "🇨🇦", "af": "🇧🇦", "hg": 1, "ag": 0, "hp": 54, "dp": 27, "ap": 20, "conf": 62}, {"md": 1, "group": "B", "home": "Qatar", "away": "Switzerland", "hf": "🇶🇦", "af": "🇨🇭", "hg": 0, "ag": 2, "hp": 9, "dp": 19, "ap": 72, "conf": 100}, {"md": 1, "group": "C", "home": "Brazil", "away": "Morocco", "hf": "🇧🇷", "af": "🇲🇦", "hg": 1, "ag": 1, "hp": 42, "dp": 26, "ap": 32, "conf": 88}, {"md": 1, "group": "C", "home": "Haiti", "away": "Scotland", "hf": "🇭🇹", "af": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "hg": 0, "ag": 1, "hp": 21, "dp": 26, "ap": 53, "conf": 62}, {"md": 1, "group": "D", "home": "USA", "away": "Paraguay", "hf": "🇺🇸", "af": "🇵🇾", "hg": 1, "ag": 1, "hp": 29, "dp": 28, "ap": 43, "conf": 75}, {"md": 1, "group": "D", "home": "Australia", "away": "Turkey", "hf": "🇦🇺", "af": "🇹🇷", "hg": 1, "ag": 1, "hp": 27, "dp": 28, "ap": 45, "conf": 75}, {"md": 1, "group": "E", "home": "Germany", "away": "Curaçao", "hf": "🇩🇪", "af": "🇨🇼", "hg": 2, "ag": 0, "hp": 78, "dp": 14, "ap": 8, "conf": 88}, {"md": 1, "group": "E", "home": "Cote d'Ivoire", "away": "Ecuador", "hf": "🇨🇮", "af": "🇪🇨", "hg": 0, "ag": 1, "hp": 24, "dp": 29, "ap": 47, "conf": 62}, {"md": 1, "group": "F", "home": "Netherlands", "away": "Japan", "hf": "🇳🇱", "af": "🇯🇵", "hg": 1, "ag": 1, "hp": 42, "dp": 29, "ap": 29, "conf": 75}, {"md": 1, "group": "F", "home": "Sweden", "away": "Tunisia", "hf": "🇸🇪", "af": "🇹🇳", "hg": 1, "ag": 1, "hp": 39, "dp": 24, "ap": 37, "conf": 75}, {"md": 1, "group": "G", "home": "Belgium", "away": "Egypt", "hf": "🇧🇪", "af": "🇪🇬", "hg": 1, "ag": 0, "hp": 59, "dp": 25, "ap": 16, "conf": 88}, {"md": 1, "group": "G", "home": "Iran", "away": "New Zealand", "hf": "🇮🇷", "af": "🇳🇿", "hg": 1, "ag": 0, "hp": 67, "dp": 20, "ap": 13, "conf": 75}, {"md": 1, "group": "H", "home": "Spain", "away": "Cape Verde", "hf": "🇪🇸", "af": "🇨🇻", "hg": 2, "ag": 0, "hp": 76, "dp": 16, "ap": 8, "conf": 88}, {"md": 1, "group": "H", "home": "Saudi Arabia", "away": "Uruguay", "hf": "🇸🇦", "af": "🇺🇾", "hg": 0, "ag": 1, "hp": 16, "dp": 26, "ap": 58, "conf": 75}, {"md": 1, "group": "I", "home": "France", "away": "Senegal", "hf": "🇫🇷", "af": "🇸🇳", "hg": 1, "ag": 1, "hp": 56, "dp": 24, "ap": 20, "conf": 50}, {"md": 1, "group": "I", "home": "Iraq", "away": "Norway", "hf": "🇮🇶", "af": "🇳🇴", "hg": 0, "ag": 1, "hp": 15, "dp": 26, "ap": 59, "conf": 88}, {"md": 1, "group": "J", "home": "Argentina", "away": "Algeria", "hf": "🇦🇷", "af": "🇩🇿", "hg": 1, "ag": 0, "hp": 67, "dp": 21, "ap": 12, "conf": 88}, {"md": 1, "group": "J", "home": "Austria", "away": "Jordan", "hf": "🇦🇹", "af": "🇯🇴", "hg": 2, "ag": 0, "hp": 65, "dp": 20, "ap": 15, "conf": 75}, {"md": 1, "group": "K", "home": "Portugal", "away": "DR Congo", "hf": "🇵🇹", "af": "🇨🇩", "hg": 1, "ag": 0, "hp": 59, "dp": 25, "ap": 16, "conf": 62}, {"md": 1, "group": "K", "home": "Uzbekistan", "away": "Colombia", "hf": "🇺🇿", "af": "🇨🇴", "hg": 0, "ag": 1, "hp": 17, "dp": 25, "ap": 58, "conf": 75}, {"md": 1, "group": "L", "home": "England", "away": "Croatia", "hf": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "af": "🇭🇷", "hg": 1, "ag": 1, "hp": 49, "dp": 28, "ap": 23, "conf": 50}, {"md": 1, "group": "L", "home": "Ghana", "away": "Panama", "hf": "🇬🇭", "af": "🇵🇦", "hg": 0, "ag": 1, "hp": 18, "dp": 22, "ap": 60, "conf": 62}, {"md": 2, "group": "A", "home": "Czech Republic", "away": "South Africa", "hf": "🇨🇿", "af": "🇿🇦", "hg": 1, "ag": 0, "hp": 51, "dp": 28, "ap": 21, "conf": 56}, {"md": 2, "group": "A", "home": "Mexico", "away": "South Korea", "hf": "🇲🇽", "af": "🇰🇷", "hg": 1, "ag": 0, "hp": 48, "dp": 33, "ap": 19, "conf": 67}, {"md": 2, "group": "B", "home": "Switzerland", "away": "Bosnia", "hf": "🇨🇭", "af": "🇧🇦", "hg": 1, "ag": 0, "hp": 56, "dp": 27, "ap": 17, "conf": 56}, {"md": 2, "group": "B", "home": "Canada", "away": "Qatar", "hf": "🇨🇦", "af": "🇶🇦", "hg": 1, "ag": 0, "hp": 67, "dp": 23, "ap": 11, "conf": 89}, {"md": 2, "group": "C", "home": "Scotland", "away": "Morocco", "hf": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "af": "🇲🇦", "hg": 1, "ag": 1, "hp": 34, "dp": 31, "ap": 35, "conf": 78}, {"md": 2, "group": "C", "home": "Brazil", "away": "Haiti", "hf": "🇧🇷", "af": "🇭🇹", "hg": 1, "ag": 0, "hp": 63, "dp": 23, "ap": 14, "conf": 67}, {"md": 2, "group": "D", "home": "USA", "away": "Australia", "hf": "🇺🇸", "af": "🇦🇺", "hg": 1, "ag": 0, "hp": 43, "dp": 31, "ap": 26, "conf": 33}, {"md": 2, "group": "D", "home": "Turkey", "away": "Paraguay", "hf": "🇹🇷", "af": "🇵🇾", "hg": 1, "ag": 1, "hp": 45, "dp": 29, "ap": 26, "conf": 67}, {"md": 2, "group": "E", "home": "Germany", "away": "Cote d'Ivoire", "hf": "🇩🇪", "af": "🇨🇮", "hg": 1, "ag": 0, "hp": 55, "dp": 27, "ap": 18, "conf": 56}, {"md": 2, "group": "E", "home": "Ecuador", "away": "Curaçao", "hf": "🇪🇨", "af": "🇨🇼", "hg": 1, "ag": 0, "hp": 62, "dp": 24, "ap": 15, "conf": 67}, {"md": 2, "group": "F", "home": "Netherlands", "away": "Sweden", "hf": "🇳🇱", "af": "🇸🇪", "hg": 1, "ag": 0, "hp": 60, "dp": 26, "ap": 13, "conf": 78}, {"md": 2, "group": "F", "home": "Tunisia", "away": "Japan", "hf": "🇹🇳", "af": "🇯🇵", "hg": 0, "ag": 1, "hp": 22, "dp": 33, "ap": 44, "conf": 44}, {"md": 2, "group": "G", "home": "Belgium", "away": "Iran", "hf": "🇧🇪", "af": "🇮🇷", "hg": 1, "ag": 0, "hp": 50, "dp": 28, "ap": 22, "conf": 67}, {"md": 2, "group": "G", "home": "New Zealand", "away": "Egypt", "hf": "🇳🇿", "af": "🇪🇬", "hg": 0, "ag": 1, "hp": 28, "dp": 30, "ap": 42, "conf": 67}, {"md": 2, "group": "H", "home": "Spain", "away": "Saudi Arabia", "hf": "🇪🇸", "af": "🇸🇦", "hg": 2, "ag": 0, "hp": 75, "dp": 18, "ap": 7, "conf": 100}, {"md": 2, "group": "H", "home": "Uruguay", "away": "Cape Verde", "hf": "🇺🇾", "af": "🇨🇻", "hg": 1, "ag": 0, "hp": 57, "dp": 27, "ap": 17, "conf": 56}, {"md": 2, "group": "I", "home": "France", "away": "Iraq", "hf": "🇫🇷", "af": "🇮🇶", "hg": 1, "ag": 0, "hp": 63, "dp": 24, "ap": 14, "conf": 89}, {"md": 2, "group": "I", "home": "Norway", "away": "Senegal", "hf": "🇳🇴", "af": "🇸🇳", "hg": 1, "ag": 1, "hp": 38, "dp": 32, "ap": 30, "conf": 78}, {"md": 2, "group": "J", "home": "Argentina", "away": "Austria", "hf": "🇦🇷", "af": "🇦🇹", "hg": 1, "ag": 0, "hp": 57, "dp": 27, "ap": 17, "conf": 56}, {"md": 2, "group": "J", "home": "Jordan", "away": "Algeria", "hf": "🇯🇴", "af": "🇩🇿", "hg": 1, "ag": 1, "hp": 34, "dp": 31, "ap": 35, "conf": 78}, {"md": 2, "group": "K", "home": "Portugal", "away": "Uzbekistan", "hf": "🇵🇹", "af": "🇺🇿", "hg": 1, "ag": 0, "hp": 60, "dp": 24, "ap": 16, "conf": 78}, {"md": 2, "group": "K", "home": "Colombia", "away": "DR Congo", "hf": "🇨🇴", "af": "🇨🇩", "hg": 1, "ag": 0, "hp": 55, "dp": 28, "ap": 17, "conf": 67}, {"md": 2, "group": "L", "home": "England", "away": "Ghana", "hf": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "af": "🇬🇭", "hg": 1, "ag": 0, "hp": 69, "dp": 22, "ap": 9, "conf": 89}, {"md": 2, "group": "L", "home": "Panama", "away": "Croatia", "hf": "🇵🇦", "af": "🇭🇷", "hg": 0, "ag": 1, "hp": 26, "dp": 31, "ap": 43, "conf": 44}, {"md": 3, "group": "A", "home": "South Africa", "away": "South Korea", "hf": "🇿🇦", "af": "🇰🇷", "hg": 0, "ag": 1, "hp": 24, "dp": 30, "ap": 46, "conf": 62}, {"md": 3, "group": "A", "home": "Czech Republic", "away": "Mexico", "hf": "🇨🇿", "af": "🇲🇽", "hg": 0, "ag": 1, "hp": 28, "dp": 31, "ap": 41, "conf": 38}, {"md": 3, "group": "B", "home": "Bosnia", "away": "Qatar", "hf": "🇧🇦", "af": "🇶🇦", "hg": 1, "ag": 0, "hp": 51, "dp": 28, "ap": 20, "conf": 62}, {"md": 3, "group": "B", "home": "Switzerland", "away": "Canada", "hf": "🇨🇭", "af": "🇨🇦", "hg": 1, "ag": 0, "hp": 45, "dp": 30, "ap": 25, "conf": 50}, {"md": 3, "group": "C", "home": "Morocco", "away": "Haiti", "hf": "🇲🇦", "af": "🇭🇹", "hg": 1, "ag": 0, "hp": 62, "dp": 25, "ap": 14, "conf": 75}, {"md": 3, "group": "C", "home": "Scotland", "away": "Brazil", "hf": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "af": "🇧🇷", "hg": 0, "ag": 1, "hp": 23, "dp": 30, "ap": 47, "conf": 50}, {"md": 3, "group": "D", "home": "Paraguay", "away": "Australia", "hf": "🇵🇾", "af": "🇦🇺", "hg": 1, "ag": 0, "hp": 39, "dp": 33, "ap": 28, "conf": 25}, {"md": 3, "group": "D", "home": "Turkey", "away": "USA", "hf": "🇹🇷", "af": "🇺🇸", "hg": 1, "ag": 0, "hp": 51, "dp": 29, "ap": 20, "conf": 62}, {"md": 3, "group": "E", "home": "Curaçao", "away": "Cote d'Ivoire", "hf": "🇨🇼", "af": "🇨🇮", "hg": 0, "ag": 1, "hp": 23, "dp": 30, "ap": 46, "conf": 38}, {"md": 3, "group": "E", "home": "Ecuador", "away": "Germany", "hf": "🇪🇨", "af": "🇩🇪", "hg": 1, "ag": 1, "hp": 35, "dp": 32, "ap": 34, "conf": 62}, {"md": 3, "group": "F", "home": "Japan", "away": "Sweden", "hf": "🇯🇵", "af": "🇸🇪", "hg": 1, "ag": 0, "hp": 62, "dp": 24, "ap": 14, "conf": 88}, {"md": 3, "group": "F", "home": "Tunisia", "away": "Netherlands", "hf": "🇹🇳", "af": "🇳🇱", "hg": 0, "ag": 1, "hp": 18, "dp": 30, "ap": 52, "conf": 75}, {"md": 3, "group": "G", "home": "Egypt", "away": "Iran", "hf": "🇪🇬", "af": "🇮🇷", "hg": 1, "ag": 1, "hp": 36, "dp": 31, "ap": 33, "conf": 75}, {"md": 3, "group": "G", "home": "New Zealand", "away": "Belgium", "hf": "🇳🇿", "af": "🇧🇪", "hg": 0, "ag": 1, "hp": 19, "dp": 27, "ap": 54, "conf": 75}, {"md": 3, "group": "H", "home": "Cape Verde", "away": "Saudi Arabia", "hf": "🇨🇻", "af": "🇸🇦", "hg": 1, "ag": 1, "hp": 40, "dp": 29, "ap": 31, "conf": 62}, {"md": 3, "group": "H", "home": "Uruguay", "away": "Spain", "hf": "🇺🇾", "af": "🇪🇸", "hg": 0, "ag": 1, "hp": 15, "dp": 27, "ap": 58, "conf": 75}, {"md": 3, "group": "I", "home": "Senegal", "away": "Iraq", "hf": "🇸🇳", "af": "🇮🇶", "hg": 1, "ag": 0, "hp": 56, "dp": 28, "ap": 16, "conf": 88}, {"md": 3, "group": "I", "home": "Norway", "away": "France", "hf": "🇳🇴", "af": "🇫🇷", "hg": 1, "ag": 1, "hp": 27, "dp": 31, "ap": 42, "conf": 75}, {"md": 3, "group": "J", "home": "Algeria", "away": "Austria", "hf": "🇩🇿", "af": "🇦🇹", "hg": 1, "ag": 1, "hp": 37, "dp": 32, "ap": 32, "conf": 75}, {"md": 3, "group": "J", "home": "Jordan", "away": "Argentina", "hf": "🇯🇴", "af": "🇦🇷", "hg": 0, "ag": 1, "hp": 13, "dp": 26, "ap": 61, "conf": 88}, {"md": 3, "group": "K", "home": "DR Congo", "away": "Uzbekistan", "hf": "🇨🇩", "af": "🇺🇿", "hg": 1, "ag": 0, "hp": 40, "dp": 31, "ap": 29, "conf": 25}, {"md": 3, "group": "K", "home": "Colombia", "away": "Portugal", "hf": "🇨🇴", "af": "🇵🇹", "hg": 1, "ag": 1, "hp": 38, "dp": 29, "ap": 33, "conf": 75}, {"md": 3, "group": "L", "home": "Croatia", "away": "Ghana", "hf": "🇭🇷", "af": "🇬🇭", "hg": 2, "ag": 0, "hp": 70, "dp": 20, "ap": 10, "conf": 88}, {"md": 3, "group": "L", "home": "Panama", "away": "England", "hf": "🇵🇦", "af": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "hg": 0, "ag": 2, "hp": 13, "dp": 21, "ap": 65, "conf": 75}];
+const GROUPS = [..."ABCDEFGHIJKL"];
+function confClass(c){ return c>=80?"hi":c>=60?"md":"lo"; }
+function confLabel(c){ return c>=80?"HIGH":c>=60?"MED":"LOW"; }
+function resCls(m){ return m.hg>m.ag?"h":m.hg===m.ag?"d":"a"; }
+function render(md){
+  const board=document.getElementById("board"); board.innerHTML="";
+  GROUPS.forEach(g=>{
+    const ms=MATCHES.filter(m=>m.md===md && m.group===g);
+    if(!ms.length) return;
+    const el=document.createElement("div"); el.className="group";
+    el.innerHTML=`<h2>Group ${g}</h2>`+ms.map(m=>`
+      <div class="match">
+        <div class="row">
+          <div class="team home"><span class="flag">${m.hf}</span><span class="name">${m.home}</span></div>
+          <div class="score ${resCls(m)}">${m.hg}–${m.ag}</div>
+          <div class="team away"><span class="flag">${m.af}</span><span class="name">${m.away}</span></div>
+        </div>
+        <div class="bar">
+          <i class="h" style="width:${m.hp}%"></i>
+          <i class="d" style="width:${m.dp}%"></i>
+          <i class="a" style="width:${m.ap}%"></i>
+        </div>
+        <div class="legend"><span><b>${m.hp}%</b> W</span><span><b>${m.dp}%</b> D</span><span><b>${m.ap}%</b> W</span></div>
+        <span class="conf ${confClass(m.conf)}">${confLabel(m.conf)} ${m.conf}%</span>
+        <div style="clear:both"></div>
+      </div>`).join("");
+    board.appendChild(el);
+  });
+}
+const tabs=document.getElementById("tabs");
+[1,2,3].forEach(md=>{
+  const b=document.createElement("button");
+  b.className="tab"+(md===1?" active":""); b.textContent="Matchday "+md;
+  b.onclick=()=>{document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+    b.classList.add("active"); render(md);};
+  tabs.appendChild(b);
+});
+render(1);
+</script>
+</body>
+</html>
