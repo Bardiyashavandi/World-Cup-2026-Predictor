@@ -103,6 +103,32 @@ def result_color(home_goals: int, away_goals: int) -> str:
         return "#e74c3c"
 
 
+# Flag emoji per team (matches the naming used in the prediction CSVs).
+TEAM_FLAGS = {
+    "Algeria": "🇩🇿", "Argentina": "🇦🇷", "Australia": "🇦🇺",
+    "Austria": "🇦🇹", "Belgium": "🇧🇪", "Bosnia": "🇧🇦",
+    "Brazil": "🇧🇷", "Canada": "🇨🇦", "Cape Verde": "🇨🇻",
+    "Colombia": "🇨🇴", "Cote d'Ivoire": "🇨🇮", "Croatia": "🇭🇷",
+    "Curaçao": "🇨🇼", "Czech Republic": "🇨🇿", "DR Congo": "🇨🇩",
+    "Ecuador": "🇪🇨", "Egypt": "🇪🇬", "England": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "France": "🇫🇷", "Germany": "🇩🇪", "Ghana": "🇬🇭",
+    "Haiti": "🇭🇹", "Iran": "🇮🇷", "Iraq": "🇮🇶", "Japan": "🇯🇵",
+    "Jordan": "🇯🇴", "Mexico": "🇲🇽", "Morocco": "🇲🇦",
+    "Netherlands": "🇳🇱", "New Zealand": "🇳🇿", "Norway": "🇳🇴",
+    "Panama": "🇵🇦", "Paraguay": "🇵🇾", "Portugal": "🇵🇹",
+    "Qatar": "🇶🇦", "Saudi Arabia": "🇸🇦", "Scotland": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+    "Senegal": "🇸🇳", "South Africa": "🇿🇦", "South Korea": "🇰🇷",
+    "Spain": "🇪🇸", "Sweden": "🇸🇪", "Switzerland": "🇨🇭",
+    "Tunisia": "🇹🇳", "Turkey": "🇹🇷", "USA": "🇺🇸",
+    "Uruguay": "🇺🇾", "Uzbekistan": "🇺🇿",
+}
+
+
+def flag(team: str) -> str:
+    """Return the flag emoji for a team (empty string if unknown)."""
+    return TEAM_FLAGS.get(team, "")
+
+
 # ─────────────────────────────────────────
 # COMPONENTS
 # ─────────────────────────────────────────
@@ -124,7 +150,7 @@ def render_match_card(row: pd.Series, actual_result=None):
         col1, col2, col3 = st.columns([3, 2, 3])
 
         with col1:
-            st.markdown(f"### {home}")
+            st.markdown(f"### {flag(home)} {home}")
             st.markdown(f"xG: **{h_xg:.2f}**")
             st.progress(h_prob)
             st.caption(f"Win: {h_prob:.1%}")
@@ -156,11 +182,13 @@ def render_match_card(row: pd.Series, actual_result=None):
                 )
 
         with col3:
-            st.markdown(f"### {away}")
+            st.markdown(f"### {flag(away)} {away}")
             st.markdown(f"xG: **{a_xg:.2f}**")
             st.progress(a_prob)
             st.caption(f"Win: {a_prob:.1%}")
 
+        # Stacked H / Draw / A probability bar spanning the full card.
+        render_probability_bar(row)
         st.divider()
 
 
@@ -334,12 +362,12 @@ def main():
             st.markdown(f"**Group {group}**")
             for _, row in group_matches.iterrows():
                 col1, col2, col3, col4 = st.columns([3, 1, 3, 2])
-                col1.markdown(f"**{row['home_team']}**")
+                col1.markdown(f"**{flag(row['home_team'])} {row['home_team']}**")
                 col2.markdown(
                     f"**{row['predicted_home_goals']}-"
                     f"{row['predicted_away_goals']}**"
                 )
-                col3.markdown(f"**{row['away_team']}**")
+                col3.markdown(f"**{flag(row['away_team'])} {row['away_team']}**")
                 col4.markdown(
                     confidence_badge(row.get("agreement_pct", 0))
                 )
@@ -582,12 +610,16 @@ def main():
         st.markdown("---")
         st.subheader("Key Takeaways")
         st.markdown("""
-        - **XGBoost** correctly predicted ~50% of match outcomes
-        - **Betting markets** predict ~55% — we are within 5%
-        - **Exact score** accuracy of ~13% is strong
-        - **Brier score** of 0.19 shows well calibrated probabilities
-        - **Historical Average** is our weakest baseline as expected
-        - Models trained on pre-tournament data generalize well
+        - The **Ensemble** is the best all-rounder: ~56% result accuracy
+          (tied best) with the best scoreline error and Brier score
+        - **Logistic Regression** ties it on result accuracy; **LightGBM /
+          XGBoost** are best for scorelines
+        - **Betting markets** predict ~55% — the top models are right there
+        - Rebalancing the ensemble weights toward the strongest models lifted
+          it from ~54% to ~56% (it had badly under-weighted Logistic)
+        - **Brier ~0.19** shows well-calibrated probabilities
+        - **Historical Average** is the weakest baseline, as expected
+        - Every model is scored on the identical 64 fixtures per tournament
         """)
 
 

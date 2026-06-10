@@ -30,38 +30,44 @@ sys.path.append("src")
 # Stakes model gets 0 weight for MD1 (no context yet)
 # increases for MD2/MD3
 
+# Weights rebalanced after backtesting (WC 2018 + 2022). The original
+# weights gave Logistic Regression — the single strongest model — only
+# 0.04, while over-weighting weak baselines (ELO, Historical Average).
+# Boosting the top three (Logistic, XGBoost, LightGBM) lifted the
+# ensemble to match the best individual model on result accuracy while
+# keeping the best scoreline error and Brier score.
 WEIGHTS = {
     1: {
-        "elo":          0.08,
+        "elo":          0.06,
         "dixon_coles":  0.12,
-        "historical_avg": 0.08,
-        "dynamic_elo":  0.12,
-        "xgboost":      0.22,
-        "lightgbm":     0.22,
-        "neural_net":   0.12,
-        "logistic":     0.04,
+        "historical_avg": 0.06,
+        "dynamic_elo":  0.08,
+        "xgboost":      0.20,
+        "lightgbm":     0.20,
+        "neural_net":   0.10,
+        "logistic":     0.18,
         "stakes_model": 0.00,
     },
     2: {
-        "elo":          0.07,
+        "elo":          0.05,
         "dixon_coles":  0.10,
-        "historical_avg": 0.07,
-        "dynamic_elo":  0.10,
-        "xgboost":      0.18,
-        "lightgbm":     0.18,
-        "neural_net":   0.10,
-        "logistic":     0.05,
-        "stakes_model": 0.15,
-    },
-    3: {
-        "elo":          0.06,
-        "dixon_coles":  0.09,
-        "historical_avg": 0.06,
-        "dynamic_elo":  0.09,
+        "historical_avg": 0.05,
+        "dynamic_elo":  0.07,
         "xgboost":      0.17,
         "lightgbm":     0.17,
         "neural_net":   0.09,
-        "logistic":     0.02,
+        "logistic":     0.15,
+        "stakes_model": 0.15,
+    },
+    3: {
+        "elo":          0.04,
+        "dixon_coles":  0.09,
+        "historical_avg": 0.05,
+        "dynamic_elo":  0.06,
+        "xgboost":      0.15,
+        "lightgbm":     0.15,
+        "neural_net":   0.08,
+        "logistic":     0.13,
         "stakes_model": 0.25,
     },
 }

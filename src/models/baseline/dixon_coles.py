@@ -262,6 +262,15 @@ def predict_match_dc(home_team: str, away_team: str,
         score_df["home_goals"] < score_df["away_goals"]
     ]["probability"].sum()
 
+    # The Dixon-Coles low-score correction and the truncated scoreline
+    # grid leave the three outcome probabilities summing to slightly
+    # under 1. Normalize so they form a proper distribution.
+    total = home_win + draw + away_win
+    if total > 0:
+        home_win, draw, away_win = (
+            home_win / total, draw / total, away_win / total
+        )
+
     top = score_df.iloc[0]
 
     return {

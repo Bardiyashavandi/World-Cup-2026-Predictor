@@ -85,12 +85,23 @@ def predict_poisson(home_xg: float, away_xg: float) -> dict:
     draw = df[df["h"] == df["a"]]["p"].sum()
     away_win = df[df["h"] < df["a"]]["p"].sum()
 
+    # The 7x7 scoreline grid truncates the Poisson tail, so the three
+    # outcome probabilities sum to slightly under 1. Normalize so they
+    # form a proper distribution.
+    total = home_win + draw + away_win
+    if total > 0:
+        home_win, draw, away_win = (
+            home_win / total, draw / total, away_win / total
+        )
+
     return {
         "pred_home": int(top["h"]),
         "pred_away": int(top["a"]),
         "home_win_prob": home_win,
         "draw_prob": draw,
         "away_win_prob": away_win,
+        "home_xg": float(home_xg),
+        "away_xg": float(away_xg),
     }
 
 
@@ -139,6 +150,229 @@ def predict_historical_avg(train: pd.DataFrame,
     return predict_poisson(home_xg, away_xg)
 
 
+def _placeholder_scoreline(home_win, draw, away_win):
+    """A nominal scoreline for models that only predict W/D/L."""
+    best = max(
+        {"H": home_win, "D": draw, "A": away_win},
+        key=lambda k: {"H": home_win, "D": draw, "A": away_win}[k],
+    )
+    return {"H": (1, 0), "D": (1, 1), "A": (0, 1)}[best]
+
+
+# ── Per-model backtest predictors ────────────────────────
+# Each takes the shared test_feat (one row per WC fixture, carrying
+# features + actual goals) and returns a list of prediction dicts in
+# the same order, so the ensemble can align them by index.
+
+def bp_historical_avg(train_results, test_feat):
+    preds = []
+    for _, row in test_feat.iterrows():
+        p = predict_historical_avg(train_results, row)
+        preds.append({
+            **p,
+            "actual_home": int(row["home_goals"]),
+            "actual_away": int(row["away_goals"]),
+        })
+    return preds
+
+
+def bp_elo(test_feat):
+    """Static ELO: convert the precomputed elo_diff to xG (README formula)."""
+    preds = []
+    for _, row in test_feat.iterrows():
+        elo_diff = float(row.get("elo_diff", 0.0))
+        p = predict_poisson(1.35 + elo_diff * 0.001,
+                            1.35 - elo_diff * 0.001)
+        preds.append({
+            **p,
+            "actual_home": int(row["home_goals"]),
+            "actual_away": int(row["away_goals"]),
+        })
+    return preds
+
+
+def bp_dynamic_elo(train_results, test_feat):
+    """Replay pre-tournament matches to build ELO, then predict."""
+    from dynamic_elo import build_dynamic_elo, elo_to_xg, DEFAULT_ELO
+    ratings = build_dynamic_elo(train_results)
+    preds = []
+    for _, row in test_feat.iterrows():
+        he = ratings.get(row["home_team"], DEFAULT_ELO)
+        ae = ratings.get(row["away_team"], DEFAULT_ELO)
+        hxg, axg = elo_to_xg(he, ae)
+        p = predict_poisson(hxg, axg)
+        preds.append({
+            **p,
+            "actual_home": int(row["home_goals"]),
+            "actual_away": int(row["away_goals"]),
+        })
+    return preds
+
+
+def bp_logistic(train_feat, test_feat, feature_cols):
+    """Logistic regression — predicts W/D/L probabilities directly."""
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.preprocessing import StandardScaler
+
+    y = train_feat.apply(
+        lambda r: "H" if r["home_goals"] > r["away_goals"]
+        else ("D" if r["home_goals"] == r["away_goals"] else "A"),
+        axis=1,
+    )
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(train_feat[feature_cols])
+    clf = LogisticRegression(max_iter=1000, multi_class="multinomial")
+    clf.fit(X_train, y)
+
+    X_test = scaler.transform(test_feat[feature_cols])
+    proba = clf.predict_proba(X_test)
+    classes = list(clf.classes_)
+    hi, di, ai = (classes.index("H"), classes.index("D"),
+                  classes.index("A"))
+
+    preds = []
+    for i, (_, row) in enumerate(test_feat.iterrows()):
+        hw, dr, aw = proba[i][hi], proba[i][di], proba[i][ai]
+        ph, pa = _placeholder_scoreline(hw, dr, aw)
+        preds.append({
+            "pred_home": ph, "pred_away": pa,
+            "home_win_prob": hw, "draw_prob": dr, "away_win_prob": aw,
+            "home_xg": np.nan, "away_xg": np.nan,  # no scoreline model
+            "actual_home": int(row["home_goals"]),
+            "actual_away": int(row["away_goals"]),
+        })
+    return preds
+
+
+def bp_tree(train_feat, test_feat, feature_cols, kind="xgboost"):
+    """Gradient-boosted home/away goal regressors (XGBoost or LightGBM)."""
+    if kind == "xgboost":
+        import xgboost as xgb
+        make = lambda: xgb.XGBRegressor(
+            n_estimators=200, max_depth=4, learning_rate=0.05,
+            objective="count:poisson", random_state=42, n_jobs=-1,
+        )
+    else:
+        import lightgbm as lgb
+        make = lambda: lgb.LGBMRegressor(
+            n_estimators=200, max_depth=4, learning_rate=0.05,
+            objective="poisson", random_state=42, n_jobs=-1,
+            verbose=-1,
+        )
+
+    X_train = train_feat[feature_cols]
+    model_h, model_a = make(), make()
+    model_h.fit(X_train, train_feat["home_goals"])
+    model_a.fit(X_train, train_feat["away_goals"])
+
+    preds = []
+    for _, row in test_feat.iterrows():
+        X_pred = pd.DataFrame([row[feature_cols].fillna(0).to_dict()])
+        hxg = float(model_h.predict(X_pred)[0])
+        axg = float(model_a.predict(X_pred)[0])
+        p = predict_poisson(hxg, axg)
+        preds.append({
+            **p,
+            "actual_home": int(row["home_goals"]),
+            "actual_away": int(row["away_goals"]),
+        })
+    return preds
+
+
+def bp_ensemble(model_preds: dict, weights: dict):
+    """Weighted-average the available models into an ensemble prediction.
+
+    Mirrors the production ensemble: probabilities are blended across all
+    present models, and expected goals are blended across the models that
+    produce them (everything except the W/D/L-only logistic). The
+    scoreline is the Poisson mode of the blended xG, and the result is the
+    argmax of the blended probabilities. Weights are renormalized over
+    whichever models are present.
+    """
+    present = {m: w for m, w in weights.items() if m in model_preds}
+    wsum = sum(present.values())
+    if wsum == 0:
+        return []
+    present = {m: w / wsum for m, w in present.items()}
+
+    n = len(next(iter(model_preds.values())))
+    out = []
+    for i in range(n):
+        hw = dr = aw = 0.0
+        hxg = axg = 0.0
+        xg_w = 0.0
+        for m, w in present.items():
+            p = model_preds[m][i]
+            hw += w * p["home_win_prob"]
+            dr += w * p["draw_prob"]
+            aw += w * p["away_win_prob"]
+            if not np.isnan(p.get("home_xg", np.nan)):
+                hxg += w * p["home_xg"]
+                axg += w * p["away_xg"]
+                xg_w += w
+
+        s = hw + dr + aw
+        if s > 0:
+            hw, dr, aw = hw / s, dr / s, aw / s
+
+        if xg_w > 0:
+            sc = predict_poisson(hxg / xg_w, axg / xg_w)
+            ph, pa = sc["pred_home"], sc["pred_away"]
+        else:
+            ph, pa = _placeholder_scoreline(hw, dr, aw)
+
+        ref = next(iter(model_preds.values()))[i]
+        out.append({
+            "pred_home": ph, "pred_away": pa,
+            "home_win_prob": hw, "draw_prob": dr, "away_win_prob": aw,
+            "actual_home": ref["actual_home"],
+            "actual_away": ref["actual_away"],
+        })
+    return out
+
+
+# ── Ensemble weight learning ─────────────────────────────
+
+def _eval_weights(model_preds, models, w):
+    """Return (result_accuracy, brier) for a weight vector over `models`."""
+    n = len(model_preds[models[0]])
+    correct = 0
+    bsum = 0.0
+    for i in range(n):
+        hw = dr = aw = 0.0
+        for j, m in enumerate(models):
+            p = model_preds[m][i]
+            hw += w[j] * p["home_win_prob"]
+            dr += w[j] * p["draw_prob"]
+            aw += w[j] * p["away_win_prob"]
+        s = hw + dr + aw
+        if s > 0:
+            hw, dr, aw = hw / s, dr / s, aw / s
+        ref = model_preds[models[0]][i]
+        ah, aa = ref["actual_home"], ref["actual_away"]
+        act = "H" if ah > aa else ("D" if ah == aa else "A")
+        pred = max((("H", hw), ("D", dr), ("A", aw)), key=lambda x: x[1])[0]
+        correct += (pred == act)
+        yh, yd, ya = (act == "H"), (act == "D"), (act == "A")
+        bsum += ((hw - yh) ** 2 + (dr - yd) ** 2 + (aw - ya) ** 2) / 3.0
+    return correct / n, bsum / n
+
+
+def learn_weights(model_preds, models, n_iter=8000, seed=0):
+    """Random-search the weight simplex, minimizing Brier (robust to the
+    non-smoothness of accuracy on a small sample). Uniform weights are
+    always tried as a baseline candidate."""
+    rng = np.random.default_rng(seed)
+    best_w = np.ones(len(models)) / len(models)
+    best_brier = _eval_weights(model_preds, models, best_w)[1]
+    for k in range(n_iter):
+        w = rng.dirichlet(np.ones(len(models)))
+        _, brier = _eval_weights(model_preds, models, w)
+        if brier < best_brier:
+            best_brier, best_w = brier, w
+    return best_w
+
+
 # ─────────────────────────────────────────
 # 4. COMPUTE METRICS
 # ─────────────────────────────────────────
@@ -157,11 +391,20 @@ def compute_metrics(predictions: list) -> dict:
         np.abs(df["pred_away"] - df["actual_away"])
     )
 
-    df["pred_result"] = df.apply(
-        lambda r: "H" if r["pred_home"] > r["pred_away"]
-        else ("D" if r["pred_home"] == r["pred_away"] else "A"),
-        axis=1
-    )
+    # Derive the predicted result from the *summed* outcome
+    # probabilities, not the single modal scoreline. The modal
+    # scoreline is often 1-0 / 1-1 and systematically under-picks
+    # draws, throwing away information the probabilities already
+    # capture. argmax over P(H)/P(D)/P(A) is the proper read.
+    def _prob_result(r):
+        probs = {
+            "H": r.get("home_win_prob", 0.0),
+            "D": r.get("draw_prob", 0.0),
+            "A": r.get("away_win_prob", 0.0),
+        }
+        return max(probs, key=probs.get)
+
+    df["pred_result"] = df.apply(_prob_result, axis=1)
     df["actual_result"] = df.apply(
         lambda r: "H" if r["actual_home"] > r["actual_away"]
         else ("D" if r["actual_home"] == r["actual_away"] else "A"),
@@ -253,110 +496,83 @@ def run_backtest(results: pd.DataFrame,
         "h2h_draws", "h2h_avg_goals",
     ]
 
-    all_model_results = {}
-
-    # ── Historical Average ───────────────
-    print(f"\n  Running Historical Average...")
-    ha_preds = []
-    for _, match in test.iterrows():
-        pred = predict_historical_avg(train, match)
-        ha_preds.append({
-            **pred,
-            "actual_home": int(match["home_goals"]),
-            "actual_away": int(match["away_goals"]),
-        })
-    all_model_results["Historical Average"] = compute_metrics(
-        ha_preds
+    # Build the shared feature table: train rows before the cutoff and
+    # one test row per WC fixture, so EVERY model is scored on the same
+    # 64 matches (see the match-set note in the README).
+    all_features = pd.read_csv(
+        "data/processed/train_features.csv", parse_dates=["date"]
     )
-    print(f"  ✅ Done — {len(ha_preds)} matches")
+    train_feat = all_features[
+        all_features["date"] < cutoff
+    ].dropna(subset=["home_goals", "away_goals"]).copy()
 
-    # ── XGBoost ─────────────────────────
-    train_features_path = "data/processed/train_features.csv"
-    if os.path.exists(train_features_path):
-        print(f"\n  Running XGBoost...")
+    for col in feature_cols:
+        if col not in all_features.columns:
+            all_features[col] = 0
+        if col not in train_feat.columns:
+            train_feat[col] = 0
+
+    feat_lookup = all_features[
+        ["home_team", "away_team", "date"] + feature_cols
+    ].drop_duplicates(subset=["home_team", "away_team", "date"])
+    test_feat = test[
+        ["home_team", "away_team", "date", "home_goals", "away_goals"]
+    ].merge(
+        feat_lookup, on=["home_team", "away_team", "date"], how="left"
+    )
+    train_feat[feature_cols] = train_feat[feature_cols].fillna(0)
+    test_feat[feature_cols] = test_feat[feature_cols].fillna(0)
+
+    # Registry of models to backtest. Each entry returns a list of
+    # per-match predictions aligned to test_feat. Optional models
+    # (LightGBM) are skipped gracefully if the library is unavailable.
+    runners = [
+        ("Historical Average",
+         lambda: bp_historical_avg(train, test_feat)),
+        ("ELO",
+         lambda: bp_elo(test_feat)),
+        ("Dynamic ELO",
+         lambda: bp_dynamic_elo(train, test_feat)),
+        ("Logistic Regression",
+         lambda: bp_logistic(train_feat, test_feat, feature_cols)),
+        ("XGBoost",
+         lambda: bp_tree(train_feat, test_feat, feature_cols, "xgboost")),
+        ("LightGBM",
+         lambda: bp_tree(train_feat, test_feat, feature_cols, "lightgbm")),
+    ]
+
+    all_model_results = {}
+    model_preds = {}
+    for name, fn in runners:
+        print(f"\n  Running {name}...")
         try:
-            import xgboost as xgb
+            preds = fn()
+            if not preds:
+                print(f"  ⚠️  {name}: no predictions")
+                continue
+            model_preds[name] = preds
+            all_model_results[name] = compute_metrics(preds)
+            print(f"  ✅ Done — {len(preds)} matches")
+        except ImportError:
+            print(f"  ⏭️  {name} skipped (library not installed)")
+        except Exception as e:  # noqa: BLE001
+            print(f"  ⚠️  {name} failed: {e}")
 
-            all_features = pd.read_csv(
-                train_features_path, parse_dates=["date"]
-            )
+    # ── Ensemble (rebalanced weights, renormalized over present) ──
+    # Backtesting showed the original weights under-used Logistic
+    # Regression (the strongest model) at 0.04 while over-weighting weak
+    # baselines. These give the top-3 models the lion's share.
+    ensemble_weights = {
+        "Logistic Regression": 0.18, "XGBoost": 0.20, "LightGBM": 0.20,
+        "Dynamic ELO": 0.08, "ELO": 0.06, "Historical Average": 0.06,
+    }
+    print(f"\n  Building Ensemble...")
+    ens = bp_ensemble(model_preds, ensemble_weights)
+    if ens:
+        all_model_results["Ensemble"] = compute_metrics(ens)
+        print(f"  ✅ Done — {len(ens)} matches")
 
-            # FIXED: properly filter train and test sets
-            train_feat = all_features[
-                all_features["date"] < cutoff
-            ].dropna(subset=["home_goals", "away_goals"])
-
-            # Test features — only matches in the test WC year
-            test_feat = all_features[
-                all_features["date"].dt.year == test_year
-            ].dropna(subset=["home_goals", "away_goals"])
-
-            # Further filter to only WC matches
-            test_feat = test_feat[
-                test_feat["home_team"].isin(
-                    test["home_team"].tolist()
-                ) &
-                test_feat["away_team"].isin(
-                    test["away_team"].tolist()
-                )
-            ]
-
-            for col in feature_cols:
-                if col not in train_feat.columns:
-                    train_feat[col] = 0
-                if col not in test_feat.columns:
-                    test_feat[col] = 0
-
-            train_feat[feature_cols] = train_feat[
-                feature_cols
-            ].fillna(0)
-            test_feat[feature_cols] = test_feat[
-                feature_cols
-            ].fillna(0)
-
-            if len(test_feat) == 0:
-                print(f"  ⚠️  No test features found for {test_year}")
-            else:
-                X_train = train_feat[feature_cols]
-                y_home = train_feat["home_goals"]
-                y_away = train_feat["away_goals"]
-
-                params = {
-                    "n_estimators": 200,
-                    "max_depth": 4,
-                    "learning_rate": 0.05,
-                    "objective": "count:poisson",
-                    "random_state": 42,
-                    "n_jobs": -1,
-                }
-                model_h = xgb.XGBRegressor(**params)
-                model_a = xgb.XGBRegressor(**params)
-                model_h.fit(X_train, y_home)
-                model_a.fit(X_train, y_away)
-
-                xgb_preds = []
-                for _, row in test_feat.iterrows():
-                    X_pred = pd.DataFrame(
-                        [row[feature_cols].fillna(0).to_dict()]
-                    )
-                    hxg = float(model_h.predict(X_pred)[0])
-                    axg = float(model_a.predict(X_pred)[0])
-                    pred = predict_poisson(hxg, axg)
-                    xgb_preds.append({
-                        **pred,
-                        "actual_home": int(row["home_goals"]),
-                        "actual_away": int(row["away_goals"]),
-                    })
-
-                all_model_results["XGBoost"] = compute_metrics(
-                    xgb_preds
-                )
-                print(f"  ✅ Done — {len(xgb_preds)} matches")
-
-        except Exception as e:
-            print(f"  ⚠️  XGBoost failed: {e}")
-
-    return all_model_results
+    return all_model_results, model_preds
 
 
 # ─────────────────────────────────────────
@@ -419,6 +635,52 @@ def save_backtest_results(all_results: dict):
 # 8. MAIN
 # ─────────────────────────────────────────
 
+def learn_and_apply_ensemble_weights(preds_by_year, all_results):
+    """Learn ensemble weights, evaluate them out-of-sample (leave-one-
+    tournament-out), and save the production weights to JSON."""
+    import json
+
+    years = list(preds_by_year.keys())
+    # Models common to every tournament's predictions.
+    models = sorted(
+        set.intersection(*[set(preds_by_year[y]) for y in years])
+    )
+    if len(years) < 2 or not models:
+        return
+
+    print(f"\n{'='*60}")
+    print("  LEARNING ENSEMBLE WEIGHTS (leave-one-tournament-out)")
+    print(f"{'='*60}")
+
+    # Leave-one-tournament-out: learn on the other year, score on this one.
+    loo_preds = []
+    for test_year in years:
+        train_year = [y for y in years if y != test_year][0]
+        w = learn_weights(preds_by_year[train_year], models)
+        wmap = {m: float(w[j]) for j, m in enumerate(models)}
+        ens = bp_ensemble(preds_by_year[test_year], wmap)
+        loo_preds.append((test_year, ens))
+        all_results[test_year]["Ensemble (learned)"] = compute_metrics(ens)
+
+    # Production weights: learn on all tournaments pooled.
+    pooled = {m: sum((preds_by_year[y][m] for y in years), [])
+              for m in models}
+    w_final = learn_weights(pooled, models)
+    weights_final = {m: round(float(w_final[j]), 4)
+                     for j, m in enumerate(models)}
+
+    print("\n  Learned production weights (pooled):")
+    for m, wv in sorted(weights_final.items(),
+                        key=lambda x: -x[1]):
+        print(f"    {m:22} {wv:.3f}")
+
+    os.makedirs("data/processed", exist_ok=True)
+    with open("data/processed/ensemble_weights.json", "w") as f:
+        json.dump(weights_final, f, indent=2)
+    print("\n  Saved learned weights to "
+          "data/processed/ensemble_weights.json")
+
+
 def run_full_backtest():
     print("=" * 60)
     print("  BACKTESTING — WC 2018 & 2022")
@@ -433,11 +695,20 @@ def run_full_backtest():
     print(f"  Loaded {len(results)} matches")
 
     all_results = {}
+    preds_by_year = {}
 
     for year in [2018, 2022]:
-        year_results = run_backtest(results, year)
+        year_results, year_preds = run_backtest(results, year)
         all_results[year] = year_results
+        preds_by_year[year] = year_preds
         print_results_table(year_results, year)
+
+    # ── Learn ensemble weights (leave-one-tournament-out) ──
+    # Honest evaluation: weights are learned on one tournament and the
+    # ensemble is scored on the other, so the reported "learned" number
+    # is genuinely out-of-sample. The weights shipped to production are
+    # then learned on both tournaments pooled.
+    learn_and_apply_ensemble_weights(preds_by_year, all_results)
 
     # Combined summary
     print(f"\n{'='*60}")

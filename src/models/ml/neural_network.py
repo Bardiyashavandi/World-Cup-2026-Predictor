@@ -298,6 +298,12 @@ def predict_scorelines(model, scaler,
             score_df["home_goals"] < score_df["away_goals"]
         ]["probability"].sum()
 
+        total = home_win + draw + away_win
+        if total > 0:
+            home_win, draw, away_win = (
+                home_win / total, draw / total, away_win / total
+            )
+
         top = score_df.iloc[0]
 
         results.append({

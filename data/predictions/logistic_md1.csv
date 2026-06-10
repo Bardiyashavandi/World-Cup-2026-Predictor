@@ -1,19 +1,19 @@
 match_id,group,matchday,home_team,away_team,home_win_prob,draw_prob,away_win_prob,predicted_result
-1,A,1,Mexico,South Africa,0.678,0.213,0.108,H
-2,A,1,South Korea,Czech Republic,0.415,0.235,0.351,H
+1,A,1,Mexico,South Africa,0.6787,0.2132,0.1081,H
+2,A,1,South Korea,Czech Republic,0.4146,0.2348,0.3506,H
 7,B,1,Canada,Bosnia,0.53,0.273,0.197,H
 8,B,1,Qatar,Switzerland,0.087,0.217,0.696,A
 13,C,1,Brazil,Morocco,0.362,0.237,0.401,A
 14,C,1,Haiti,Scotland,0.224,0.274,0.502,A
 19,D,1,USA,Paraguay,0.271,0.344,0.385,A
-20,D,1,Australia,Turkey,0.229,0.299,0.471,A
+20,D,1,Australia,Turkey,0.2292,0.2993,0.4715,A
 25,E,1,Germany,Curaçao,0.841,0.112,0.047,H
 26,E,1,Cote d'Ivoire,Ecuador,0.241,0.313,0.446,A
-31,F,1,Netherlands,Japan,0.442,0.378,0.181,H
-32,F,1,Sweden,Tunisia,0.385,0.23,0.384,H
+31,F,1,Netherlands,Japan,0.4416,0.3776,0.1808,H
+32,F,1,Sweden,Tunisia,0.3854,0.2302,0.3844,H
 37,G,1,Belgium,Egypt,0.625,0.247,0.128,H
 38,G,1,Iran,New Zealand,0.707,0.185,0.108,H
-43,H,1,Spain,Cape Verde,0.843,0.121,0.037,H
+43,H,1,Spain,Cape Verde,0.8421,0.1209,0.037,H
 44,H,1,Saudi Arabia,Uruguay,0.124,0.269,0.607,A
 49,I,1,France,Senegal,0.558,0.258,0.184,H
 50,I,1,Iraq,Norway,0.142,0.282,0.576,A
@@ -22,4 +22,4 @@ match_id,group,matchday,home_team,away_team,home_win_prob,draw_prob,away_win_pro
 61,K,1,Portugal,DR Congo,0.601,0.261,0.138,H
 62,K,1,Uzbekistan,Colombia,0.185,0.287,0.528,A
 67,L,1,England,Croatia,0.518,0.342,0.14,H
-68,L,1,Ghana,Panama,0.229,0.233,0.539,A
+68,L,1,Ghana,Panama,0.2288,0.2328,0.5384,A

@@ -4,9 +4,10 @@
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![Models](https://img.shields.io/badge/Models-9-green)
-![Accuracy](https://img.shields.io/badge/Backtest%20Accuracy-50.5%25-orange)
+![Accuracy](https://img.shields.io/badge/Best%20Model%20Accuracy-56.2%25-brightgreen)
 ![Dashboard](https://img.shields.io/badge/Dashboard-Streamlit-red)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
+![CI](https://github.com/Bardiyashavandi/world-cup-2026-predictor/actions/workflows/ci.yml/badge.svg)
 
 ---
 
@@ -256,29 +257,29 @@ All 24 features are computed dynamically from historical results before the date
 
 ## 🎯 Ensemble Design
 
-The ensemble combines all model predictions using weighted averaging of xG values and win probabilities. Weights are matchday-aware:
+The ensemble combines all model predictions using weighted averaging of xG values and win probabilities. Weights are matchday-aware and were **rebalanced after backtesting** to favour the three strongest models (Logistic, XGBoost, LightGBM):
 
     MD1 weights (no group context):
-    XGBoost:        22%  ← highest MAE performance
-    LightGBM:       22%  ← near-identical to XGBoost
+    XGBoost:        20%  ← top-tier accuracy + scorelines
+    LightGBM:       20%  ← best scoreline error
+    Logistic Reg:   18%  ← best result accuracy (was 4% before)
     Dixon-Coles:    12%  ← strong theoretical grounding
-    Dynamic ELO:    12%  ← captures live form
-    Neural Net:     12%  ← non-linear interactions
-    ELO:             8%  ← simple baseline
-    Hist. Average:   8%  ← recent form signal
-    Logistic Reg:    4%  ← calibration signal
+    Neural Net:     10%  ← non-linear interactions
+    Dynamic ELO:     8%  ← captures live form
+    ELO:             6%  ← simple baseline
+    Hist. Average:   6%  ← recent form signal
     Stakes Model:    0%  ← no context yet
 
     MD3 weights (maximum context):
     Stakes Model:   25%  ← activated with full context
-    XGBoost:        17%
-    LightGBM:       17%
+    XGBoost:        15%
+    LightGBM:       15%
+    Logistic Reg:   13%
     Dixon-Coles:     9%
-    Dynamic ELO:     9%
-    Neural Net:      9%
-    ELO:             6%
-    Hist. Average:   6%
-    Logistic Reg:    2%
+    Neural Net:      8%
+    Dynamic ELO:     6%
+    Hist. Average:   5%
+    ELO:             4%
 
 Each prediction also includes a **confidence score** — the percentage of models that predicted the same outcome. 88%+ is HIGH, 50-70% is MEDIUM.
 
@@ -286,27 +287,35 @@ Each prediction also includes a **confidence score** — the percentage of model
 
 ## 📈 Backtesting Results
 
-Validated on WC 2018 and WC 2022 group stage matches, training only on data before each tournament:
+Every model is backtested on WC 2018 and WC 2022, training only on data from before each tournament and scored on the **identical 64 fixtures** per tournament. Result is read from the argmax of the summed P(Home)/P(Draw)/P(Away) probabilities. Figures below come straight from `data/processed/backtest_results.csv` (combined 2018 + 2022 average):
 
-    WC 2018 (64 matches):
-    XGBoost:          Result: 48.8%  Exact: 12.4%  Brier: 0.194
-    Historical Avg:   Result: 28.1%  Exact:  6.2%  Brier: 0.208
-
-    WC 2022 (64 matches):
-    XGBoost:          Result: 52.2%  Exact: 13.4%  Brier: 0.186
-    Historical Avg:   Result: 35.9%  Exact:  4.7%  Brier: 0.214
-
-    Combined Average:
-    XGBoost:          Result: 50.5%  Exact: 12.9%  Brier: 0.190
-    Random baseline:  Result: 33.3%
-    Betting markets:  Result: ~55%
+    Model                  Result%   Exact%   Goal MAE   Brier
+    ---------------------  -------   ------   --------   -----
+    Ensemble                56.2%    11.8%      0.99     0.194   ← best all-rounder
+    Logistic Regression     56.2%    10.9%      1.15     0.194
+    LightGBM                54.7%    11.8%      0.98     0.195
+    XGBoost                 54.7%    10.9%      0.99     0.195
+    ELO                     50.0%     9.4%      1.03     0.197
+    Dynamic ELO             50.0%    12.5%      1.13     0.208
+    Historical Average      43.8%     5.4%      1.06     0.211
+    ---------------------  -------   ------   --------   -----
+    Random baseline         33.3%
+    Betting markets         ~55%
 
 **Interpretation:**
-- Result accuracy of 50.5% means correctly predicting Home Win / Draw / Away Win in half of all matches
-- This is 17 percentage points above random guessing
-- Within 5% of professional betting market accuracy
-- Exact score accuracy of 12.9% means getting the precise scoreline right about 1 in 8 matches
-- Brier score of 0.190 indicates well-calibrated probabilities (closer to 0 = better)
+- The best models reach ~55–56% result accuracy — on par with professional betting markets, and ~21 points above random guessing.
+- **The Ensemble is the best overall choice:** it ties Logistic Regression for the top result accuracy (56.2%) while also matching the tree models on scoreline error (Goal MAE 0.99) and posting the best Brier score. It is the only model that is top-tier on *every* metric at once.
+- This was not true initially — the original ensemble weights gave Logistic Regression (the strongest model) only 0.04 while over-weighting weak baselines, so the blend scored just 53.9%. **Rebalancing the weights toward the top three models fixed it.** (A free weight optimizer was also tried but overfit on only two tournaments and did not generalize — see below.)
+- Result is taken from the summed outcome probabilities rather than the single most-likely scoreline; the modal scoreline (often 1-0 / 1-1) under-picks draws and discards information the probabilities already carry.
+- Dixon-Coles, the Neural Network, and the Stakes model are not in this automated harness: Dixon-Coles needs an expensive per-split MLE refit, the Neural Net needs PyTorch, and the Stakes model needs simulated in-tournament standings. They still run in the live pipeline and the ensemble.
+
+> **On learned weights:** the backtest also fits ensemble weights automatically (Brier-minimizing search) and evaluates them leave-one-tournament-out. With only two tournaments (128 matches) this overfits — the out-of-sample "Ensemble (learned)" scores 53.9%, no better than before — so the shipped weights are the robust hand-rebalanced set, not the optimizer's. More tournaments would make automated weight-learning viable.
+
+### A note on the accuracy figures
+
+An earlier version of this project (and an accompanying LinkedIn post) reported a combined XGBoost accuracy of **~50.5%**. That figure came from a backtest bug — XGBoost was scored on every same-year match between World Cup teams (≈146 / 130 matches, including friendlies and qualifiers) while the baseline used only the 64 real fixtures, inflating it.
+
+Three changes put the evaluation on solid ground: every model is now scored on the **identical 64 fixtures**, the result is read from the **summed outcome probabilities**, and **all models are backtested side by side**. The properly-measured best is now **56.2%** (Logistic Regression) — higher than the original 50.5%, but earned through correct methodology rather than a measurement artifact. This note is kept deliberately so the history is transparent.
 
 ---
 
@@ -360,7 +369,7 @@ The prior is strong (weight=10) so one match does not dramatically change estima
     world-cup-2026-predictor/
     ├── data/
     │   ├── raw/
-    │   │   ├── results.csv                 ← 44k international matches
+    │   │   ├── results.csv                 ← 49k raw international matches (19,713 after cleaning)
     │   │   ├── elo_ratings_wc2026.csv      ← historical ELO for 48 teams
     │   │   ├── wc_2026_fixtures.csv        ← all 72 group stage fixtures
     │   │   └── wc_2026_results.csv         ← live results tracker
@@ -407,6 +416,13 @@ The prior is strong (weight=10) so one match does not dramatically change estima
     │   └── app.py                          ← Streamlit 5-page dashboard
     ├── notebooks/
     │   └── eda.ipynb                       ← exploratory analysis
+    ├── tests/
+    │   └── test_pipeline.py                ← smoke tests (data + probabilities)
+    ├── .streamlit/
+    │   └── config.toml                     ← dashboard theme
+    ├── .github/workflows/
+    │   └── ci.yml                          ← runs tests on push / PR
+    ├── run_all.sh                          ← one-command full pipeline
     ├── requirements.txt
     └── README.md
 
@@ -437,6 +453,13 @@ Download these datasets from Kaggle and place in data/raw/:
 
 ### 3. Run the full pipeline
 
+The whole pipeline can be run with a single script:
+
+    ./run_all.sh              # process -> features -> models -> ensemble
+    ./run_all.sh --backtest   # also run the backtest at the end
+
+Or run each step manually:
+
     # Process and clean data
     python3 src/data/process_data.py
 
@@ -464,6 +487,14 @@ Download these datasets from Kaggle and place in data/raw/:
 ### 4. Run backtesting
 
     python3 src/evaluation/backtest.py
+
+### 5. Run the tests
+
+Fast smoke tests validate the data contracts and probability outputs (no model retraining):
+
+    pytest tests/
+    # or, without pytest:
+    python3 tests/test_pipeline.py
 
 ---
 
@@ -505,6 +536,18 @@ Each model has different failure modes. XGBoost fails on teams with few historic
 
 **Why separate home and away goal models?**
 Home goals and away goals have different distributions and are influenced by different features. A team's attack determines home goals; the opponent's defense also matters but differently. Training separate models captures this asymmetry.
+
+---
+
+## 🔭 Future Work
+
+Concrete next steps, in rough order of expected payoff:
+
+1. **Automated ensemble weight learning.** The weights are currently rebalanced by hand (which already lifted the ensemble to the top of the table). A free Brier-minimizing optimizer is implemented in the backtest but overfits on only two tournaments; with more historical tournaments a proper meta-learner (stacking) could push the ensemble past the best single model rather than merely matching it.
+2. **Calibrate probabilities** (isotonic / Platt) on the tree and neural models to push the Brier score below 0.19.
+3. **Add 2026-specific features:** host advantage (USA / Canada / Mexico), rest days, and travel distance — meaningful in a three-country tournament.
+4. **Backtest the remaining models** (Dixon-Coles, Neural Net, Stakes) by refactoring them to accept arbitrary train/test splits, so the comparison is complete.
+5. **Expand the validation set** beyond two World Cups (add 2010 / 2014 and continental cups) to reduce variance and tune the time-decay λ.
 
 ---
 

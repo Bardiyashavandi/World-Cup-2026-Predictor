@@ -78,6 +78,14 @@ def get_match_probabilities(score_matrix: pd.DataFrame) -> dict:
         score_matrix["home_goals"] < score_matrix["away_goals"]
     ]["probability"].sum()
 
+    # Normalize: the truncated scoreline grid drops a little tail mass,
+    # so rescale the three outcomes into a proper distribution.
+    total = home_win + draw + away_win
+    if total > 0:
+        home_win, draw, away_win = (
+            home_win / total, draw / total, away_win / total
+        )
+
     return {
         "home_win_prob": round(home_win, 3),
         "draw_prob": round(draw, 3),

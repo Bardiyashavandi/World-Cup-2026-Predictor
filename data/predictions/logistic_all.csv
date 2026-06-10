@@ -1,6 +1,6 @@
 match_id,group,matchday,home_team,away_team,home_win_prob,draw_prob,away_win_prob,predicted_result
-1,A,1,Mexico,South Africa,0.678,0.213,0.108,H
-2,A,1,South Korea,Czech Republic,0.415,0.235,0.351,H
+1,A,1,Mexico,South Africa,0.6787,0.2132,0.1081,H
+2,A,1,South Korea,Czech Republic,0.4146,0.2348,0.3506,H
 3,A,2,Czech Republic,South Africa,0.51,0.321,0.169,H
 4,A,2,Mexico,South Korea,0.441,0.42,0.139,H
 5,A,3,South Africa,South Korea,0.207,0.391,0.402,A
@@ -14,34 +14,34 @@ match_id,group,matchday,home_team,away_team,home_win_prob,draw_prob,away_win_pro
 13,C,1,Brazil,Morocco,0.362,0.237,0.401,A
 14,C,1,Haiti,Scotland,0.224,0.274,0.502,A
 15,C,2,Scotland,Morocco,0.314,0.431,0.255,D
-16,C,2,Brazil,Haiti,0.737,0.169,0.095,H
+16,C,2,Brazil,Haiti,0.7363,0.1688,0.0949,H
 17,C,3,Morocco,Haiti,0.536,0.343,0.121,H
-18,C,3,Scotland,Brazil,0.159,0.422,0.418,D
+18,C,3,Scotland,Brazil,0.1592,0.4224,0.4184,D
 19,D,1,USA,Paraguay,0.271,0.344,0.385,A
-20,D,1,Australia,Turkey,0.229,0.299,0.471,A
+20,D,1,Australia,Turkey,0.2292,0.2993,0.4715,A
 21,D,2,USA,Australia,0.405,0.42,0.175,D
-22,D,2,Turkey,Paraguay,0.4,0.38,0.219,H
+22,D,2,Turkey,Paraguay,0.4004,0.3804,0.2192,H
 23,D,3,Paraguay,Australia,0.277,0.454,0.269,D
 24,D,3,Turkey,USA,0.354,0.485,0.161,D
 25,E,1,Germany,Curaçao,0.841,0.112,0.047,H
 26,E,1,Cote d'Ivoire,Ecuador,0.241,0.313,0.446,A
 27,E,2,Germany,Cote d'Ivoire,0.541,0.316,0.143,H
-28,E,2,Ecuador,Curaçao,0.679,0.239,0.083,H
+28,E,2,Ecuador,Curaçao,0.6783,0.2388,0.0829,H
 29,E,3,Curaçao,Cote d'Ivoire,0.212,0.398,0.39,D
 30,E,3,Ecuador,Germany,0.201,0.451,0.348,D
-31,F,1,Netherlands,Japan,0.442,0.378,0.181,H
-32,F,1,Sweden,Tunisia,0.385,0.23,0.384,H
+31,F,1,Netherlands,Japan,0.4416,0.3776,0.1808,H
+32,F,1,Sweden,Tunisia,0.3854,0.2302,0.3844,H
 33,F,2,Netherlands,Sweden,0.53,0.383,0.087,H
-34,F,2,Tunisia,Japan,0.194,0.432,0.375,D
+34,F,2,Tunisia,Japan,0.1938,0.4316,0.3746,D
 35,F,3,Japan,Sweden,0.455,0.39,0.155,H
 36,F,3,Tunisia,Netherlands,0.132,0.421,0.447,A
 37,G,1,Belgium,Egypt,0.625,0.247,0.128,H
 38,G,1,Iran,New Zealand,0.707,0.185,0.108,H
-39,G,2,Belgium,Iran,0.425,0.379,0.195,H
-40,G,2,New Zealand,Egypt,0.235,0.354,0.412,A
+39,G,2,Belgium,Iran,0.4254,0.3794,0.1952,H
+40,G,2,New Zealand,Egypt,0.2348,0.3536,0.4116,A
 41,G,3,Egypt,Iran,0.322,0.42,0.258,D
-42,G,3,New Zealand,Belgium,0.169,0.344,0.488,A
-43,H,1,Spain,Cape Verde,0.843,0.121,0.037,H
+42,G,3,New Zealand,Belgium,0.1688,0.3437,0.4875,A
+43,H,1,Spain,Cape Verde,0.8421,0.1209,0.037,H
 44,H,1,Saudi Arabia,Uruguay,0.124,0.269,0.607,A
 45,H,2,Spain,Saudi Arabia,0.775,0.198,0.027,H
 46,H,2,Uruguay,Cape Verde,0.578,0.32,0.102,H
@@ -52,13 +52,13 @@ match_id,group,matchday,home_team,away_team,home_win_prob,draw_prob,away_win_pro
 51,I,2,France,Iraq,0.646,0.275,0.079,H
 52,I,2,Norway,Senegal,0.321,0.404,0.275,D
 53,I,3,Senegal,Iraq,0.536,0.337,0.127,H
-54,I,3,Norway,France,0.215,0.419,0.367,D
+54,I,3,Norway,France,0.2148,0.4186,0.3666,D
 55,J,1,Argentina,Algeria,0.736,0.161,0.103,H
 56,J,1,Austria,Jordan,0.683,0.192,0.125,H
 57,J,2,Argentina,Austria,0.503,0.341,0.156,H
 58,J,2,Jordan,Algeria,0.315,0.432,0.253,D
-59,J,3,Algeria,Austria,0.306,0.427,0.268,D
-60,J,3,Jordan,Argentina,0.121,0.422,0.456,A
+59,J,3,Algeria,Austria,0.3057,0.4266,0.2677,D
+60,J,3,Jordan,Argentina,0.1211,0.4224,0.4565,A
 61,K,1,Portugal,DR Congo,0.601,0.261,0.138,H
 62,K,1,Uzbekistan,Colombia,0.185,0.287,0.528,A
 63,K,2,Portugal,Uzbekistan,0.509,0.333,0.158,H
@@ -66,7 +66,7 @@ match_id,group,matchday,home_team,away_team,home_win_prob,draw_prob,away_win_pro
 65,K,3,DR Congo,Uzbekistan,0.322,0.381,0.297,D
 66,K,3,Colombia,Portugal,0.308,0.419,0.273,D
 67,L,1,England,Croatia,0.518,0.342,0.14,H
-68,L,1,Ghana,Panama,0.229,0.233,0.539,A
+68,L,1,Ghana,Panama,0.2288,0.2328,0.5384,A
 69,L,2,England,Ghana,0.685,0.249,0.066,H
 70,L,2,Panama,Croatia,0.219,0.396,0.385,D
 71,L,3,Croatia,Ghana,0.64,0.28,0.08,H

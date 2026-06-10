@@ -260,6 +260,12 @@ def predict_match_dynamic(home_team: str, away_team: str,
         score_df["home_goals"] < score_df["away_goals"]
     ]["probability"].sum()
 
+    total = home_win + draw + away_win
+    if total > 0:
+        home_win, draw, away_win = (
+            home_win / total, draw / total, away_win / total
+        )
+
     top = score_df.iloc[0]
 
     return {
