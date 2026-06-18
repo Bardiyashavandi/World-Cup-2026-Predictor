@@ -11,7 +11,7 @@
 ![CI](https://github.com/Bardiyashavandi/world-cup-2026-predictor/actions/workflows/ci.yml/badge.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
-[**🌐 Live Predictions Board**](https://bardiyashavandi.github.io/world-cup-2026-predictor/) · [**🏆 Predicted Bracket**](https://bardiyashavandi.github.io/world-cup-2026-predictor/bracket.html)
+[**🌐 Live Predictions Board**](https://bardiyashavandi.github.io/World-Cup-2026-Predictor/) · [**🏆 Predicted Bracket**](https://bardiyashavandi.github.io/World-Cup-2026-Predictor/bracket.html)
 
 </div>
 
