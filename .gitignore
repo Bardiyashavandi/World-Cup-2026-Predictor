@@ -15,6 +15,7 @@ data/processed/*
 !data/processed/.gitkeep
 !data/raw/wc_2026_fixtures.csv
 !data/raw/wc_2026_results.csv
+!data/raw/market_odds.csv
 
 # Jupyter
 .ipynb_checkpoints/

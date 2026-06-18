@@ -1,13 +1,30 @@
-# ⚽ FIFA World Cup 2026 — Group Stage Predictor
+<div align="center">
 
-> A production-grade multi-model machine learning system for predicting the 2026 FIFA World Cup group stage. Combines classical statistical models, gradient boosting, and neural networks into a weighted ensemble with live Bayesian updating after each matchday.
+# ⚽ FIFA World Cup 2026 — Match Predictor
+
+**A multi-model machine-learning system that predicts every group-stage match of the 2026 World Cup — scorelines, probabilities, live standings, and a full knockout bracket — and updates itself after each matchday.**
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![Models](https://img.shields.io/badge/Models-9-green)
-![Accuracy](https://img.shields.io/badge/Best%20Model%20Accuracy-56.2%25-brightgreen)
-![Dashboard](https://img.shields.io/badge/Dashboard-Streamlit-red)
-![License](https://img.shields.io/badge/License-MIT-yellow)
+![Accuracy](https://img.shields.io/badge/Backtest%20Accuracy-56.2%25-brightgreen)
+![Tests](https://img.shields.io/badge/tests-passing-brightgreen)
 ![CI](https://github.com/Bardiyashavandi/world-cup-2026-predictor/actions/workflows/ci.yml/badge.svg)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
+[**🌐 Live Predictions Board**](https://bardiyashavandi.github.io/world-cup-2026-predictor/) · [**🏆 Predicted Bracket**](https://bardiyashavandi.github.io/world-cup-2026-predictor/bracket.html)
+
+</div>
+
+---
+
+## ✨ Highlights
+
+- **9 models → one ensemble** — statistics (ELO, Dynamic ELO, Dixon-Coles, Historical Average), gradient boosting (XGBoost, LightGBM), a neural network, logistic regression, and a group-context "stakes" model.
+- **~56% backtested result accuracy** — on par with professional betting markets, validated leak-free on WC 2018 & 2022 (every model scored on the identical 64 fixtures).
+- **Live updating that works** — enter a matchday's results and the pipeline folds them into the data, rebuilds features and standings, and re-predicts the rest of the tournament.
+- **Market blending** — optionally fuse the model with bookmaker odds via a de-vigged logarithmic opinion pool.
+- **Shareable visuals** — an interactive predictions board and an auto-generated knockout bracket (host free on GitHub Pages), plus a 5-page Streamlit dashboard.
+- **Engineered properly** — smoke-test suite, GitHub Actions CI, one-command pipeline, and transparent, honest evaluation.
 
 ---
 
@@ -43,11 +60,15 @@ The system is **iterative** — after each matchday it ingests real results, upd
     │  └─ Dynamic ELO     └─ Logistic Reg          │
     └──────────────────────────────────────────────┘
            ↓
-    Weighted Ensemble (matchday-aware weights)
+    Weighted Ensemble (matchday-aware, backtest-tuned weights)
            ↓
-    Final Predictions + Confidence Scores
+    (optional) Market Blend  ←  de-vigged bookmaker odds
            ↓
-    Streamlit Dashboard + CSV Outputs
+    Predictions + Confidence Scores
+           ↓
+    Dashboard · Predictions Board · Knockout Bracket · CSV outputs
+           ↓
+    ⟳ Live update after each matchday (re-runs the loop)
 
 ---
 
@@ -313,6 +334,20 @@ Each prediction also includes a **confidence score** — the percentage of model
 
 ---
 
+## 🎲 Market Blending (optional)
+
+Betting markets price in information the model can't see (injuries, line-ups, sharp money) and sit at ~55% accuracy. `src/ensemble/market_blend.py` fuses the ensemble with bookmaker odds:
+
+1. **De-vig** the decimal odds — implied probability = 1/odds, renormalized to remove the bookmaker's overround.
+2. **Logarithmic opinion pool** — combine the two probability vectors as a weighted geometric mean, `p ∝ p_model^w · p_market^(1−w)`, then renormalize. `w` (default 0.5) controls how much to trust the model vs the market.
+3. Matches without odds fall back to the pure ensemble.
+
+    python3 src/ensemble/market_blend.py 2 --weight 0.5
+
+Fill `data/raw/market_odds.csv` (`match_id, home_odds, draw_odds, away_odds`) and the output lands in `data/predictions/market_blended_md*.csv`. In practice this sharpens the toss-ups toward the market while leaving the model free to disagree where it has genuine signal.
+
+---
+
 ## 📈 Backtesting Results
 
 Every model is backtested on WC 2018 and WC 2022, training only on data from before each tournament and scored on the **identical 64 fixtures** per tournament. Result is read from the argmax of the summed P(Home)/P(Draw)/P(Away) probabilities. Figures below come straight from `data/processed/backtest_results.csv` (combined 2018 + 2022 average):
@@ -359,8 +394,10 @@ The system is designed for live tournament use. After each matchday:
             python3 src/updater/update_predictions.py --matchday 1
 
     The pipeline automatically:
+    ├── Folds played WC results into the historical match set
+    │   (process_data merges wc_2026_results.csv)
     ├── Rebuilds features with new results
-    │   (form, H2H now includes actual WC matches)
+    │   (form, H2H now genuinely include the actual WC matches)
     ├── Computes group standings
     ├── Runs Bayesian strength updater
     │   (team attack/defense estimates updated from real goals)
@@ -434,9 +471,13 @@ The prior is strong (weight=10) so one match does not dramatically change estima
     │   │       ├── logistic_regression.py
     │   │       └── stakes_model.py
     │   ├── ensemble/
-    │   │   └── ensemble.py
+    │   │   ├── ensemble.py                 ← backtest-tuned weighted ensemble
+    │   │   └── market_blend.py             ← blend with bookmaker odds (log-pool)
     │   ├── evaluation/
-    │   │   └── backtest.py
+    │   │   └── backtest.py                 ← all models + ensemble, leave-one-tournament-out
+    │   ├── viz/
+    │   │   ├── build_board.py              ← generates the predictions board
+    │   │   └── build_bracket.py            ← generates the knockout bracket
     │   └── updater/
     │       ├── update_predictions.py
     │       └── bayesian_updater.py
@@ -476,6 +517,7 @@ Or run the important files one by one (in this order):
 | 5. See the dashboard | `streamlit run dashboard/app.py` | Opens the interactive predictor in your browser |
 | 5b. Build the board | `python3 src/viz/build_board.py` | Generates `docs/index.html` — a shareable predictions board (hostable on GitHub Pages) |
 | 5c. Build the bracket | `python3 src/viz/build_bracket.py` | Generates `docs/bracket.html` — predicted knockout bracket all the way to a champion |
+| 5d. Market blend (optional) | `python3 src/ensemble/market_blend.py 2` | Blends the ensemble with bookmaker odds from `data/raw/market_odds.csv` |
 | 6. Check accuracy | `python3 src/evaluation/backtest.py` | Backtests every model on WC 2018 + 2022 |
 | 7. Run the tests | `pytest tests/` | Quick checks that everything is working |
 
