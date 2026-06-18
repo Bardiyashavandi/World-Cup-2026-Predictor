@@ -40,6 +40,63 @@ def process_results(path: str = "data/raw/results.csv") -> pd.DataFrame:
     return df
 
 
+def merge_played_wc_results(
+    results: pd.DataFrame,
+    path: str = "data/raw/wc_2026_results.csv",
+) -> pd.DataFrame:
+    """Fold real, played WC 2026 results into the historical match set.
+
+    Without this, form / head-to-head / ELO features never reflect what
+    actually happened during the tournament — so live updating after each
+    matchday had no real effect. Played rows are converted to the same
+    schema as the historical results and appended (de-duplicated so the
+    step is safe to re-run with updated scores).
+    """
+    if not os.path.exists(path):
+        return results
+
+    wc = pd.read_csv(path)
+    wc = wc[wc["played"].astype(str).str.lower() == "true"].copy()
+    wc = wc.dropna(subset=["home_goals", "away_goals"])
+    if len(wc) == 0:
+        return results
+
+    wc["date"] = pd.to_datetime(wc["date"])
+    wc = normalize_dataframe(wc, ["home_team", "away_team"])
+    wc["home_score"] = wc["home_goals"].astype(int)
+    wc["away_score"] = wc["away_goals"].astype(int)
+    wc["home_goals"] = wc["home_score"]
+    wc["away_goals"] = wc["away_score"]
+    wc["tournament"] = "FIFA World Cup"
+    wc["country"] = wc.get("city", "")
+    wc["neutral"] = True
+    wc["total_goals"] = wc["home_score"] + wc["away_score"]
+    wc["goal_difference"] = wc["home_score"] - wc["away_score"]
+    wc["result"] = wc["goal_difference"].apply(
+        lambda x: "H" if x > 0 else ("A" if x < 0 else "D")
+    )
+    wc["is_world_cup"] = 1
+    wc["is_friendly"] = 0
+
+    # Align to the historical schema, then append.
+    for col in results.columns:
+        if col not in wc.columns:
+            wc[col] = None
+    wc = wc[results.columns]
+
+    combined = pd.concat([results, wc], ignore_index=True)
+    key = (combined["date"].dt.strftime("%Y-%m-%d") + "|"
+           + combined["home_team"].astype(str) + "|"
+           + combined["away_team"].astype(str))
+    combined = combined[~key.duplicated(keep="last")]
+    combined = combined.sort_values("date").reset_index(drop=True)
+
+    n_added = len(combined) - len(results)
+    print(f"  Folded in {len(wc)} played WC 2026 matches "
+          f"(+{n_added} new rows)")
+    return combined
+
+
 def process_fixtures(path: str = "data/raw/wc_2026_fixtures.csv") -> pd.DataFrame:
     """Clean the 2026 WC fixtures."""
     df = pd.read_csv(path)
@@ -60,6 +117,7 @@ def save_all(out_dir: str = "data/processed"):
 
     print("Processing results...")
     results = process_results()
+    results = merge_played_wc_results(results)
     results.to_csv(f"{out_dir}/results_clean.csv", index=False)
     print(f"  Saved {len(results)} matches to results_clean.csv")
 

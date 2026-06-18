@@ -1,25 +1,25 @@
 home_team,away_team,home_xg,away_xg,predicted_home_goals,predicted_away_goals,home_win_prob,draw_prob,away_win_prob,match_id,group,matchday,city
 Mexico,South Africa,1.3,0.95,1,0,0.446,0.282,0.272,1,A,1,Mexico City
 South Korea,Czech Republic,1.2,1.7,1,1,0.27,0.24,0.49,2,A,1,Guadalajara
-Canada,Bosnia,1.05,1.2,1,1,0.3193,0.2863,0.3944,7,B,1,Toronto
+Canada,Bosnia,1.05,1.2,1,1,0.319,0.286,0.394,7,B,1,Toronto
 Qatar,Switzerland,0.75,1.85,0,1,0.146,0.22,0.634,8,B,1,San Francisco
-Brazil,Morocco,1.4,1.65,1,1,0.3263,0.2392,0.4344,13,C,1,New York
-Haiti,Scotland,1.25,1.55,1,1,0.3077,0.2498,0.4426,14,C,1,Boston
-USA,Paraguay,1.4,1.45,1,1,0.3636,0.2507,0.3856,19,D,1,Los Angeles
+Brazil,Morocco,1.4,1.65,1,1,0.326,0.239,0.434,13,C,1,New York
+Haiti,Scotland,1.25,1.55,1,1,0.308,0.25,0.443,14,C,1,Boston
+USA,Paraguay,1.4,1.45,1,1,0.364,0.251,0.386,19,D,1,Los Angeles
 Australia,Turkey,1.3,1.75,1,1,0.286,0.235,0.479,20,D,1,Vancouver
 Germany,Curaçao,2.1,1.35,2,1,0.545,0.211,0.244,25,E,1,Houston
-Cote d'Ivoire,Ecuador,1.2,1.0,1,1,0.4054,0.2893,0.3053,26,E,1,Philadelphia
+Cote d'Ivoire,Ecuador,1.2,1.0,1,1,0.405,0.289,0.305,26,E,1,Philadelphia
 Netherlands,Japan,1.7,1.3,1,1,0.468,0.238,0.294,31,F,1,Dallas
 Sweden,Tunisia,1.35,1.65,1,1,0.314,0.241,0.445,32,F,1,Monterrey
-Belgium,Egypt,2.15,0.95,2,0,0.6454,0.1978,0.1568,37,G,1,Seattle
+Belgium,Egypt,2.15,0.95,2,0,0.646,0.198,0.157,37,G,1,Seattle
 Iran,New Zealand,1.75,0.65,1,0,0.638,0.228,0.134,38,G,1,Los Angeles
-Spain,Cape Verde,1.95,1.05,1,1,0.5816,0.2182,0.2002,43,H,1,Atlanta
+Spain,Cape Verde,1.95,1.05,1,1,0.581,0.218,0.2,43,H,1,Atlanta
 Saudi Arabia,Uruguay,1.05,1.25,1,1,0.31,0.282,0.408,44,H,1,Miami
 France,Senegal,1.65,1.35,1,1,0.445,0.241,0.314,49,I,1,New York
-Iraq,Norway,0.95,1.95,0,1,0.1788,0.2158,0.6054,50,I,1,Boston
+Iraq,Norway,0.95,1.95,0,1,0.179,0.216,0.606,50,I,1,Boston
 Argentina,Algeria,1.35,1.1,1,1,0.424,0.271,0.305,55,J,1,Kansas City
-Austria,Jordan,2.1,1.05,2,1,0.6126,0.2052,0.1822,56,J,1,San Francisco
-Portugal,DR Congo,1.45,1.05,1,1,0.4625,0.2637,0.2737,61,K,1,Houston
-Uzbekistan,Colombia,1.15,1.6,1,1,0.2743,0.2482,0.4775,62,K,1,Dallas
-England,Croatia,1.6,1.2,1,1,0.4655,0.2478,0.2867,67,L,1,Dallas
+Austria,Jordan,2.1,1.05,2,1,0.612,0.205,0.182,56,J,1,San Francisco
+Portugal,DR Congo,1.45,1.05,1,1,0.463,0.264,0.274,61,K,1,Houston
+Uzbekistan,Colombia,1.15,1.6,1,1,0.274,0.248,0.477,62,K,1,Dallas
+England,Croatia,1.6,1.2,1,1,0.466,0.248,0.287,67,L,1,Dallas
 Ghana,Panama,1.35,1.6,1,1,0.323,0.244,0.433,68,L,1,Atlanta

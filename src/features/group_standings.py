@@ -271,9 +271,9 @@ def save_standings(matchday: int = 1):
         for _, row in group_df.iterrows():
             print(
                 f"  {row['group_position']}. {row['team']:25} "
-                f"Pts:{row['points']} "
-                f"GD:{row['goal_difference']:+d} "
-                f"GF:{row['goals_for']}"
+                f"Pts:{int(row['points'])} "
+                f"GD:{int(row['goal_difference']):+d} "
+                f"GF:{int(row['goals_for'])}"
             )
 
     print(f"\nSaved to {out_path}")

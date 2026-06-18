@@ -1,73 +1,73 @@
 home_team,away_team,home_xg,away_xg,predicted_home_goals,predicted_away_goals,home_win_prob,draw_prob,away_win_prob,method,match_id,group,matchday,city
-Mexico,South Africa,1.677,0.491,1,0,0.65,0.262,0.088,dixon_coles,1,A,1,Mexico City
-South Korea,Czech Republic,1.839,1.721,1,1,0.398,0.252,0.35,dixon_coles,2,A,1,Guadalajara
-Czech Republic,South Africa,2.175,1.114,1,1,0.597,0.232,0.171,dixon_coles,3,A,2,Mexico City
-Mexico,South Korea,1.541,0.698,1,0,0.556,0.295,0.149,dixon_coles,4,A,2,Guadalajara
-South Africa,South Korea,0.927,1.235,1,1,0.255,0.335,0.41,dixon_coles,5,A,3,Mexico City
-Czech Republic,Mexico,1.23,1.851,1,1,0.236,0.264,0.5,dixon_coles,6,A,3,Guadalajara
-Canada,Bosnia,1.54,1.16,1,1,0.44,0.294,0.266,elo_fallback,7,B,1,Toronto
-Qatar,Switzerland,0.535,3.545,0,3,0.022,0.0849,0.8931,dixon_coles,8,B,1,San Francisco
-Switzerland,Bosnia,1.645,1.055,1,1,0.4905,0.2857,0.2238,elo_fallback,9,B,2,Toronto
-Canada,Qatar,2.374,0.379,2,0,0.809,0.157,0.034,dixon_coles,10,B,2,San Francisco
-Bosnia,Qatar,1.519,1.181,1,1,0.43,0.295,0.275,elo_fallback,11,B,3,Toronto
-Switzerland,Canada,1.623,0.98,1,1,0.5035,0.2883,0.2082,dixon_coles,12,B,3,San Francisco
-Brazil,Morocco,1.094,0.964,1,1,0.3594,0.3483,0.2923,dixon_coles,13,C,1,New York
-Haiti,Scotland,1.115,1.585,1,1,0.248,0.291,0.461,elo_fallback,14,C,1,Boston
-Scotland,Morocco,1.295,1.405,1,1,0.325,0.3,0.375,elo_fallback,15,C,2,New York
-Brazil,Haiti,1.802,0.898,1,1,0.5675,0.2663,0.1662,elo_fallback,16,C,2,Boston
-Morocco,Haiti,1.64,1.06,1,1,0.488,0.286,0.226,elo_fallback,17,C,3,New York
-Scotland,Brazil,1.133,1.567,1,1,0.255,0.292,0.453,elo_fallback,18,C,3,Boston
-USA,Paraguay,1.192,1.527,1,1,0.277,0.294,0.429,dixon_coles,19,D,1,Los Angeles
-Australia,Turkey,1.011,0.993,1,1,0.328,0.354,0.318,dixon_coles,20,D,1,Vancouver
-USA,Australia,1.144,1.044,1,1,0.356,0.338,0.306,dixon_coles,21,D,2,Los Angeles
-Turkey,Paraguay,1.201,1.274,1,1,0.3247,0.3157,0.3596,dixon_coles,22,D,2,Vancouver
-Paraguay,Australia,0.981,0.601,0,0,0.4144,0.3874,0.1982,dixon_coles,23,D,3,Los Angeles
-Turkey,USA,2.085,1.486,1,1,0.4975,0.2422,0.2603,dixon_coles,24,D,3,Vancouver
-Germany,Curaçao,1.837,0.863,1,1,0.5845,0.2613,0.1542,elo_fallback,25,E,1,Houston
-Cote d'Ivoire,Ecuador,0.716,0.71,0,0,0.2917,0.4206,0.2877,dixon_coles,26,E,1,Philadelphia
-Germany,Cote d'Ivoire,1.62,1.203,1,1,0.4505,0.2853,0.2643,dixon_coles,27,E,2,Houston
-Ecuador,Curaçao,1.847,0.853,1,1,0.589,0.26,0.151,elo_fallback,28,E,2,Philadelphia
-Curaçao,Cote d'Ivoire,1.11,1.59,1,1,0.246,0.29,0.464,elo_fallback,29,E,3,Houston
-Ecuador,Germany,1.019,0.883,0,0,0.355,0.363,0.282,dixon_coles,30,E,3,Philadelphia
-Netherlands,Japan,0.844,1.091,0,0,0.256,0.357,0.387,dixon_coles,31,F,1,Dallas
-Sweden,Tunisia,2.246,1.257,1,1,0.579,0.229,0.192,dixon_coles,32,F,1,Monterrey
-Netherlands,Sweden,2.537,1.323,2,1,0.62,0.206,0.174,dixon_coles,33,F,2,Dallas
-Tunisia,Japan,0.485,1.594,0,1,0.0931,0.2753,0.6316,dixon_coles,34,F,2,Monterrey
-Japan,Sweden,2.43,0.844,2,0,0.706,0.195,0.099,dixon_coles,35,F,3,Dallas
-Tunisia,Netherlands,0.761,1.665,1,1,0.15,0.28,0.57,dixon_coles,36,F,3,Monterrey
-Belgium,Egypt,1.818,0.518,1,0,0.674,0.243,0.083,dixon_coles,37,G,1,Seattle
-Iran,New Zealand,1.525,1.175,1,1,0.432,0.295,0.273,elo_fallback,38,G,1,Los Angeles
-Belgium,Iran,2.587,0.825,2,0,0.736,0.178,0.086,dixon_coles,39,G,2,Seattle
-New Zealand,Egypt,1.246,1.454,1,1,0.3033,0.2983,0.3984,elo_fallback,40,G,2,Los Angeles
-Egypt,Iran,0.913,0.88,0,0,0.3213,0.3754,0.3033,dixon_coles,41,G,3,Seattle
-New Zealand,Belgium,1.068,1.632,1,1,0.229,0.287,0.484,elo_fallback,42,G,3,Los Angeles
-Spain,Cape Verde,1.966,0.734,2,0,0.646,0.239,0.115,elo_fallback,43,H,1,Atlanta
-Saudi Arabia,Uruguay,0.496,1.416,0,1,0.111,0.307,0.582,dixon_coles,44,H,1,Miami
-Spain,Saudi Arabia,3.264,0.485,3,0,0.881,0.096,0.023,dixon_coles,45,H,2,Atlanta
-Uruguay,Cape Verde,1.693,1.007,1,1,0.514,0.281,0.205,elo_fallback,46,H,2,Miami
-Cape Verde,Saudi Arabia,1.331,1.369,1,1,0.341,0.3,0.359,elo_fallback,47,H,3,Atlanta
-Uruguay,Spain,0.958,1.44,1,1,0.2298,0.3097,0.4605,dixon_coles,48,H,3,Miami
-France,Senegal,2.486,1.055,2,1,0.6683,0.2008,0.1309,dixon_coles,49,I,1,New York
-Iraq,Norway,0.521,1.275,0,1,0.133,0.334,0.533,dixon_coles,50,I,1,Boston
-France,Iraq,1.833,0.421,1,0,0.705,0.231,0.064,dixon_coles,51,I,2,New York
-Norway,Senegal,2.009,1.125,1,1,0.5596,0.2482,0.1922,dixon_coles,52,I,2,Boston
-Senegal,Iraq,1.509,0.703,1,0,0.546,0.3,0.154,dixon_coles,53,I,3,New York
-Norway,France,1.203,1.367,1,1,0.308,0.308,0.384,dixon_coles,54,I,3,Boston
-Argentina,Algeria,1.18,0.381,1,0,0.549,0.348,0.103,dixon_coles,55,J,1,Kansas City
-Austria,Jordan,2.273,0.804,2,0,0.689,0.208,0.103,dixon_coles,56,J,1,San Francisco
-Argentina,Austria,1.264,0.418,1,0,0.562,0.332,0.106,dixon_coles,57,J,2,Kansas City
-Jordan,Algeria,0.872,1.781,1,1,0.163,0.268,0.569,dixon_coles,58,J,2,San Francisco
-Algeria,Austria,1.076,0.951,1,1,0.357,0.351,0.292,dixon_coles,59,J,3,Kansas City
-Jordan,Argentina,0.384,2.091,0,2,0.045,0.191,0.764,dixon_coles,60,J,3,San Francisco
-Portugal,DR Congo,0.999,0.519,0,0,0.445,0.387,0.168,dixon_coles,61,K,1,Houston
-Uzbekistan,Colombia,0.7,1.906,0,2,0.113,0.245,0.642,dixon_coles,62,K,1,Dallas
-Portugal,Uzbekistan,1.78,0.505,1,0,0.669,0.248,0.083,dixon_coles,63,K,2,Houston
-Colombia,DR Congo,1.243,0.62,0,0,0.494,0.341,0.165,dixon_coles,64,K,2,Dallas
-DR Congo,Uzbekistan,0.814,0.382,0,0,0.4174,0.4364,0.1461,dixon_coles,65,K,3,Houston
-Colombia,Portugal,1.641,1.356,1,1,0.423,0.279,0.298,dixon_coles,66,K,3,Dallas
-England,Croatia,1.277,0.895,1,1,0.43,0.331,0.239,dixon_coles,67,L,1,Dallas
-Ghana,Panama,1.266,1.522,1,1,0.296,0.292,0.412,dixon_coles,68,L,1,Atlanta
-England,Ghana,2.553,0.456,2,0,0.814,0.148,0.038,dixon_coles,69,L,2,Dallas
-Panama,Croatia,0.884,2.14,0,2,0.129,0.227,0.644,dixon_coles,70,L,2,Atlanta
-Croatia,Ghana,2.243,0.492,2,0,0.761,0.185,0.054,dixon_coles,71,L,3,Dallas
-Panama,England,0.819,2.435,0,2,0.095,0.192,0.713,dixon_coles,72,L,3,Atlanta
+Mexico,South Africa,1.823,0.458,1,0,0.692,0.238,0.07,dixon_coles,1,A,1,Mexico City
+South Korea,Czech Republic,1.849,1.462,1,1,0.45,0.262,0.289,dixon_coles,2,A,1,Guadalajara
+Czech Republic,South Africa,2.12,1.036,1,1,0.603,0.237,0.16,dixon_coles,3,A,2,Mexico City
+Mexico,South Korea,1.487,0.69,1,0,0.543,0.305,0.152,dixon_coles,4,A,2,Guadalajara
+South Africa,South Korea,0.833,1.304,1,1,0.216,0.331,0.453,dixon_coles,5,A,3,Mexico City
+Czech Republic,Mexico,1.123,1.849,1,1,0.211,0.266,0.523,dixon_coles,6,A,3,Guadalajara
+Canada,Bosnia,1.54,1.16,1,1,0.439,0.296,0.265,elo_fallback,7,B,1,Toronto
+Qatar,Switzerland,0.554,2.697,0,2,0.044,0.146,0.81,dixon_coles,8,B,1,San Francisco
+Switzerland,Bosnia,1.645,1.055,1,1,0.49,0.287,0.223,elo_fallback,9,B,2,Toronto
+Canada,Qatar,1.981,0.39,2,0,0.743,0.207,0.05,dixon_coles,10,B,2,San Francisco
+Bosnia,Qatar,1.519,1.181,1,1,0.429,0.297,0.274,elo_fallback,11,B,3,Toronto
+Switzerland,Canada,1.467,0.925,1,1,0.475,0.309,0.216,dixon_coles,12,B,3,San Francisco
+Brazil,Morocco,1.028,0.943,0,0,0.343,0.359,0.298,dixon_coles,13,C,1,New York
+Haiti,Scotland,1.115,1.585,1,1,0.247,0.293,0.461,elo_fallback,14,C,1,Boston
+Scotland,Morocco,1.295,1.405,1,1,0.324,0.302,0.374,elo_fallback,15,C,2,New York
+Brazil,Haiti,1.802,0.898,1,1,0.567,0.268,0.165,elo_fallback,16,C,2,Boston
+Morocco,Haiti,1.64,1.06,1,1,0.487,0.288,0.225,elo_fallback,17,C,3,New York
+Scotland,Brazil,1.133,1.567,1,1,0.254,0.294,0.452,elo_fallback,18,C,3,Boston
+USA,Paraguay,1.674,1.446,1,1,0.412,0.275,0.314,dixon_coles,19,D,1,Los Angeles
+Australia,Turkey,1.237,0.792,0,0,0.444,0.341,0.215,dixon_coles,20,D,1,Vancouver
+USA,Australia,1.112,1.155,1,1,0.323,0.334,0.344,dixon_coles,21,D,2,Los Angeles
+Turkey,Paraguay,1.409,1.309,1,1,0.373,0.3,0.327,dixon_coles,22,D,2,Vancouver
+Paraguay,Australia,0.833,0.847,0,0,0.301,0.39,0.309,dixon_coles,23,D,3,Los Angeles
+Turkey,USA,1.923,1.749,1,1,0.41,0.248,0.342,dixon_coles,24,D,3,Vancouver
+Germany,Curaçao,1.837,0.863,1,1,0.584,0.263,0.154,elo_fallback,25,E,1,Houston
+Cote d'Ivoire,Ecuador,0.768,0.543,0,0,0.352,0.434,0.214,dixon_coles,26,E,1,Philadelphia
+Germany,Cote d'Ivoire,1.431,1.233,1,1,0.394,0.303,0.303,dixon_coles,27,E,2,Houston
+Ecuador,Curaçao,1.847,0.853,1,1,0.588,0.261,0.15,elo_fallback,28,E,2,Philadelphia
+Curaçao,Cote d'Ivoire,1.11,1.59,1,1,0.245,0.292,0.463,elo_fallback,29,E,3,Houston
+Ecuador,Germany,0.934,0.928,0,0,0.317,0.37,0.313,dixon_coles,30,E,3,Philadelphia
+Netherlands,Japan,1.047,1.253,1,1,0.285,0.329,0.386,dixon_coles,31,F,1,Dallas
+Sweden,Tunisia,3.079,1.192,3,1,0.73,0.161,0.109,dixon_coles,32,F,1,Monterrey
+Netherlands,Sweden,2.634,1.651,2,1,0.57,0.206,0.224,dixon_coles,33,F,2,Dallas
+Tunisia,Japan,0.56,1.975,0,2,0.08,0.227,0.694,dixon_coles,34,F,2,Monterrey
+Japan,Sweden,2.521,1.116,2,1,0.661,0.201,0.138,dixon_coles,35,F,3,Dallas
+Tunisia,Netherlands,0.829,2.063,0,2,0.124,0.234,0.641,dixon_coles,36,F,3,Monterrey
+Belgium,Egypt,1.575,0.549,1,0,0.607,0.285,0.109,dixon_coles,37,G,1,Seattle
+Iran,New Zealand,1.525,1.175,1,1,0.432,0.297,0.272,elo_fallback,38,G,1,Los Angeles
+Belgium,Iran,2.341,0.845,2,0,0.69,0.205,0.105,dixon_coles,39,G,2,Seattle
+New Zealand,Egypt,1.246,1.454,1,1,0.302,0.3,0.398,elo_fallback,40,G,2,Los Angeles
+Egypt,Iran,0.945,0.828,0,0,0.343,0.378,0.279,dixon_coles,41,G,3,Seattle
+New Zealand,Belgium,1.068,1.632,1,1,0.228,0.289,0.483,elo_fallback,42,G,3,Los Angeles
+Spain,Cape Verde,1.966,0.734,2,0,0.645,0.241,0.114,elo_fallback,43,H,1,Atlanta
+Saudi Arabia,Uruguay,0.541,1.265,0,1,0.139,0.338,0.524,dixon_coles,44,H,1,Miami
+Spain,Saudi Arabia,3.065,0.503,3,0,0.86,0.111,0.028,dixon_coles,45,H,2,Atlanta
+Uruguay,Cape Verde,1.693,1.007,1,1,0.513,0.282,0.204,elo_fallback,46,H,2,Miami
+Cape Verde,Saudi Arabia,1.331,1.369,1,1,0.34,0.302,0.358,elo_fallback,47,H,3,Atlanta
+Uruguay,Spain,0.887,1.394,1,1,0.217,0.319,0.465,dixon_coles,48,H,3,Miami
+France,Senegal,2.605,1.036,2,1,0.692,0.19,0.118,dixon_coles,49,I,1,New York
+Iraq,Norway,0.583,1.935,0,2,0.087,0.234,0.679,dixon_coles,50,I,1,Boston
+France,Iraq,2.428,0.441,2,0,0.801,0.159,0.04,dixon_coles,51,I,2,New York
+Norway,Senegal,2.456,1.159,2,1,0.64,0.209,0.151,dixon_coles,52,I,2,Boston
+Senegal,Iraq,1.931,0.745,2,0,0.635,0.246,0.119,dixon_coles,53,I,3,New York
+Norway,France,1.452,1.457,1,1,0.355,0.289,0.357,dixon_coles,54,I,3,Boston
+Argentina,Algeria,1.574,0.323,1,0,0.677,0.264,0.059,dixon_coles,55,J,1,Kansas City
+Austria,Jordan,2.486,0.822,2,0,0.72,0.189,0.091,dixon_coles,56,J,1,San Francisco
+Argentina,Austria,1.439,0.388,1,0,0.622,0.296,0.082,dixon_coles,57,J,2,Kansas City
+Jordan,Algeria,1.063,1.749,1,1,0.21,0.276,0.513,dixon_coles,58,J,2,San Francisco
+Algeria,Austria,1.08,1.2,1,1,0.304,0.332,0.364,dixon_coles,59,J,3,Kansas City
+Jordan,Argentina,0.343,2.33,0,2,0.031,0.158,0.811,dixon_coles,60,J,3,San Francisco
+Portugal,DR Congo,1.004,0.564,0,0,0.432,0.386,0.181,dixon_coles,61,K,1,Houston
+Uzbekistan,Colombia,0.767,2.181,0,2,0.103,0.217,0.68,dixon_coles,62,K,1,Dallas
+Portugal,Uzbekistan,2.035,0.559,2,0,0.706,0.219,0.076,dixon_coles,63,K,2,Houston
+Colombia,DR Congo,1.273,0.655,0,0,0.492,0.338,0.17,dixon_coles,64,K,2,Dallas
+DR Congo,Uzbekistan,0.988,0.408,0,0,0.474,0.394,0.132,dixon_coles,65,K,3,Houston
+Colombia,Portugal,1.743,1.35,1,1,0.448,0.273,0.279,dixon_coles,66,K,3,Dallas
+England,Croatia,2.019,1.186,1,1,0.547,0.25,0.203,dixon_coles,67,L,1,Dallas
+Ghana,Panama,1.208,1.12,1,1,0.357,0.328,0.314,dixon_coles,68,L,1,Atlanta
+England,Ghana,2.646,0.515,2,0,0.812,0.146,0.041,dixon_coles,69,L,2,Dallas
+Panama,Croatia,1.011,2.353,1,1,0.133,0.212,0.654,dixon_coles,70,L,2,Atlanta
+Croatia,Ghana,2.143,0.6,2,0,0.715,0.209,0.076,dixon_coles,71,L,3,Dallas
+Panama,England,0.867,2.905,0,2,0.074,0.155,0.771,dixon_coles,72,L,3,Atlanta

@@ -1,25 +1,25 @@
 home_team,away_team,home_xg,away_xg,predicted_home_goals,predicted_away_goals,home_win_prob,draw_prob,away_win_prob,method,match_id,group,matchday,city
-Mexico,South Africa,1.677,0.491,1,0,0.65,0.262,0.088,dixon_coles,1,A,1,Mexico City
-South Korea,Czech Republic,1.839,1.721,1,1,0.398,0.252,0.35,dixon_coles,2,A,1,Guadalajara
-Canada,Bosnia,1.54,1.16,1,1,0.44,0.294,0.266,elo_fallback,7,B,1,Toronto
-Qatar,Switzerland,0.535,3.545,0,3,0.022,0.0849,0.8931,dixon_coles,8,B,1,San Francisco
-Brazil,Morocco,1.094,0.964,1,1,0.3594,0.3483,0.2923,dixon_coles,13,C,1,New York
-Haiti,Scotland,1.115,1.585,1,1,0.248,0.291,0.461,elo_fallback,14,C,1,Boston
-USA,Paraguay,1.192,1.527,1,1,0.277,0.294,0.429,dixon_coles,19,D,1,Los Angeles
-Australia,Turkey,1.011,0.993,1,1,0.328,0.354,0.318,dixon_coles,20,D,1,Vancouver
-Germany,Curaçao,1.837,0.863,1,1,0.5845,0.2613,0.1542,elo_fallback,25,E,1,Houston
-Cote d'Ivoire,Ecuador,0.716,0.71,0,0,0.2917,0.4206,0.2877,dixon_coles,26,E,1,Philadelphia
-Netherlands,Japan,0.844,1.091,0,0,0.256,0.357,0.387,dixon_coles,31,F,1,Dallas
-Sweden,Tunisia,2.246,1.257,1,1,0.579,0.229,0.192,dixon_coles,32,F,1,Monterrey
-Belgium,Egypt,1.818,0.518,1,0,0.674,0.243,0.083,dixon_coles,37,G,1,Seattle
-Iran,New Zealand,1.525,1.175,1,1,0.432,0.295,0.273,elo_fallback,38,G,1,Los Angeles
-Spain,Cape Verde,1.966,0.734,2,0,0.646,0.239,0.115,elo_fallback,43,H,1,Atlanta
-Saudi Arabia,Uruguay,0.496,1.416,0,1,0.111,0.307,0.582,dixon_coles,44,H,1,Miami
-France,Senegal,2.486,1.055,2,1,0.6683,0.2008,0.1309,dixon_coles,49,I,1,New York
-Iraq,Norway,0.521,1.275,0,1,0.133,0.334,0.533,dixon_coles,50,I,1,Boston
-Argentina,Algeria,1.18,0.381,1,0,0.549,0.348,0.103,dixon_coles,55,J,1,Kansas City
-Austria,Jordan,2.273,0.804,2,0,0.689,0.208,0.103,dixon_coles,56,J,1,San Francisco
-Portugal,DR Congo,0.999,0.519,0,0,0.445,0.387,0.168,dixon_coles,61,K,1,Houston
-Uzbekistan,Colombia,0.7,1.906,0,2,0.113,0.245,0.642,dixon_coles,62,K,1,Dallas
-England,Croatia,1.277,0.895,1,1,0.43,0.331,0.239,dixon_coles,67,L,1,Dallas
-Ghana,Panama,1.266,1.522,1,1,0.296,0.292,0.412,dixon_coles,68,L,1,Atlanta
+Mexico,South Africa,1.823,0.458,1,0,0.692,0.238,0.07,dixon_coles,1,A,1,Mexico City
+South Korea,Czech Republic,1.849,1.462,1,1,0.45,0.262,0.289,dixon_coles,2,A,1,Guadalajara
+Canada,Bosnia,1.54,1.16,1,1,0.439,0.296,0.265,elo_fallback,7,B,1,Toronto
+Qatar,Switzerland,0.554,2.697,0,2,0.044,0.146,0.81,dixon_coles,8,B,1,San Francisco
+Brazil,Morocco,1.028,0.943,0,0,0.343,0.359,0.298,dixon_coles,13,C,1,New York
+Haiti,Scotland,1.115,1.585,1,1,0.247,0.293,0.461,elo_fallback,14,C,1,Boston
+USA,Paraguay,1.674,1.446,1,1,0.412,0.275,0.314,dixon_coles,19,D,1,Los Angeles
+Australia,Turkey,1.237,0.792,0,0,0.444,0.341,0.215,dixon_coles,20,D,1,Vancouver
+Germany,Curaçao,1.837,0.863,1,1,0.584,0.263,0.154,elo_fallback,25,E,1,Houston
+Cote d'Ivoire,Ecuador,0.768,0.543,0,0,0.352,0.434,0.214,dixon_coles,26,E,1,Philadelphia
+Netherlands,Japan,1.047,1.253,1,1,0.285,0.329,0.386,dixon_coles,31,F,1,Dallas
+Sweden,Tunisia,3.079,1.192,3,1,0.73,0.161,0.109,dixon_coles,32,F,1,Monterrey
+Belgium,Egypt,1.575,0.549,1,0,0.607,0.285,0.109,dixon_coles,37,G,1,Seattle
+Iran,New Zealand,1.525,1.175,1,1,0.432,0.297,0.272,elo_fallback,38,G,1,Los Angeles
+Spain,Cape Verde,1.966,0.734,2,0,0.645,0.241,0.114,elo_fallback,43,H,1,Atlanta
+Saudi Arabia,Uruguay,0.541,1.265,0,1,0.139,0.338,0.524,dixon_coles,44,H,1,Miami
+France,Senegal,2.605,1.036,2,1,0.692,0.19,0.118,dixon_coles,49,I,1,New York
+Iraq,Norway,0.583,1.935,0,2,0.087,0.234,0.679,dixon_coles,50,I,1,Boston
+Argentina,Algeria,1.574,0.323,1,0,0.677,0.264,0.059,dixon_coles,55,J,1,Kansas City
+Austria,Jordan,2.486,0.822,2,0,0.72,0.189,0.091,dixon_coles,56,J,1,San Francisco
+Portugal,DR Congo,1.004,0.564,0,0,0.432,0.386,0.181,dixon_coles,61,K,1,Houston
+Uzbekistan,Colombia,0.767,2.181,0,2,0.103,0.217,0.68,dixon_coles,62,K,1,Dallas
+England,Croatia,2.019,1.186,1,1,0.547,0.25,0.203,dixon_coles,67,L,1,Dallas
+Ghana,Panama,1.208,1.12,1,1,0.357,0.328,0.314,dixon_coles,68,L,1,Atlanta
