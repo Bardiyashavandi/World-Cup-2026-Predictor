@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World Cup 2026 — Predicted Standings</title>
+<style>
+  :root{--bg:#0e1117;--panel:#161d2b;--panel2:#1d2636;--line:#2a3446;
+    --text:#f4f6fb;--muted:#9aa7bd;--green:#2ecc71;--teal:#27e0a0;}
+  *{box-sizing:border-box;} body{margin:0;color:var(--text);
+    background:radial-gradient(1200px 600px at 50% -10%,#16321f 0,transparent 60%),var(--bg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    padding:30px 16px 60px;}
+  header{text-align:center;margin-bottom:6px;}
+  h1{font-size:28px;margin:0 0 6px;} .sub{color:var(--muted);font-size:14px;margin-bottom:4px;}
+  .wrap{max-width:1080px;margin:0 auto;}
+  .legend{display:flex;gap:16px;justify-content:center;font-size:12px;color:var(--muted);margin-bottom:22px;flex-wrap:wrap;}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:middle;}
+  .groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;}
+  .group{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+  .group h2{margin:0;padding:11px 16px;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;
+    color:var(--muted);background:var(--panel2);border-bottom:1px solid var(--line);}
+  table{width:100%;border-collapse:collapse;font-size:14px;}
+  th{font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);
+    text-align:right;padding:8px 10px 6px;font-weight:600;}
+  th.t{text-align:left;}
+  td{padding:8px 10px;border-top:1px solid var(--line);text-align:right;}
+  td.t{text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;}
+  td.pts{font-weight:800;}
+  tr.q td{box-shadow:inset 3px 0 0 var(--green);} tr.q td.t{color:#eafff2;font-weight:700;}
+  tr.q3 td{box-shadow:inset 3px 0 0 var(--teal);} tr.q3 td.t{color:#dffbef;font-weight:600;}
+  tr.out td{opacity:.5;}
+  .pos{color:var(--muted);font-size:12px;}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:30px;line-height:1.6;}
+</style></head><body>
+<div class="wrap">
+<header>
+  <h1>📊 FIFA World Cup 2026 — Predicted Final Standings</h1>
+  <div class="sub">Projected group tables from the ensemble's predicted scorelines</div>
+</header>
+<div style="display:flex;gap:8px;justify-content:center;margin:4px 0 26px;flex-wrap:wrap;"><a href="index.html" style="background:#161d2b;color:#9aa7bd;border:1px solid #2a3446;text-decoration:none;padding:8px 18px;border-radius:999px;font-size:14px;font-weight:700;">Board</a><a href="standings.html" style="background:#2ecc71;color:#06210f;text-decoration:none;padding:8px 18px;border-radius:999px;font-size:14px;font-weight:700;">Standings</a><a href="bracket.html" style="background:#161d2b;color:#9aa7bd;border:1px solid #2a3446;text-decoration:none;padding:8px 18px;border-radius:999px;font-size:14px;font-weight:700;">Bracket</a></div>
+<div class="legend">
+  <span><span class="dot" style="background:var(--green)"></span>Top 2 — through</span>
+  <span><span class="dot" style="background:var(--teal)"></span>Best third — through</span>
+  <span><span class="dot" style="background:#3a4258"></span>Eliminated</span>
+</div>
+<div class="groups">
+<div class="group"><h2>Group A</h2><table><tr><th class="t">Team</th><th>Pts</th><th>GD</th><th>GF</th></tr><tr class="q"><td class="t"><span class="pos">1</span> 🇲🇽 Mexico</td><td class="pts">9</td><td>+3</td><td>3</td></tr><tr class="q"><td class="t"><span class="pos">2</span> 🇰🇷 South Korea</td><td class="pts">4</td><td>+0</td><td>2</td></tr><tr class="q3"><td class="t"><span class="pos">3</span> 🇨🇿 Czech Republic</td><td class="pts">4</td><td>+0</td><td>2</td></tr><tr class="out"><td class="t"><span class="pos">4</span> 🇿🇦 South Africa</td><td class="pts">0</td><td>-3</td><td>0</td></tr></table></div>
+<div class="group"><h2>Group B</h2><table><tr><th class="t">Team</th><th>Pts</th><th>GD</th><th>GF</th></tr><tr class="q"><td class="t"><span class="pos">1</span> 🇨🇭 Switzerland</td><td class="pts">9</td><td>+4</td><td>4</td></tr><tr class="q"><td class="t"><span class="pos">2</span> 🇨🇦 Canada</td><td class="pts">6</td><td>+2</td><td>3</td></tr><tr class="out"><td class="t"><span class="pos">3</span> 🇧🇦 Bosnia</td><td class="pts">3</td><td>-1</td><td>1</td></tr><tr class="out"><td class="t"><span class="pos">4</span> 🇶🇦 Qatar</td><td class="pts">0</td><td>-5</td><td>0</td></tr></table></div>
+<div class="group"><h2>Group C</h2><table><tr><th class="t">Team</th><th>Pts</th><th>GD</th><th>GF</th></tr><tr class="q"><td class="t"><span class="pos">1</span> 🇧🇷 Brazil</td><td class="pts">7</td><td>+2</td><td>3</td></tr><tr class="q"><td class="t"><span class="pos">2</span> 🇲🇦 Morocco</td><td class="pts">5</td><td>+1</td><td>3</td></tr><tr class="q3"><td class="t"><span class="pos">3</span> 🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland</td><td class="pts">4</td><td>+0</td><td>2</td></tr><tr class="out"><td class="t"><span class="pos">4</span> 🇭🇹 Haiti</td><td class="pts">0</td><td>-3</td><td>0</td></tr></table></div>
+<div class="group"><h2>Group D</h2><table><tr><th class="t">Team</th><th>Pts</th><th>GD</th><th>GF</th></tr><tr class="q"><td class="t"><span class="pos">1</span> 🇹🇷 Turkey</td><td class="pts">5</td><td>+1</td><td>3</td></tr><tr class="q"><td class="t"><span class="pos">2</span> 🇵🇾 Paraguay</td><td class="pts">3</td><td>+0</td><td>2</td></tr><tr class="q3"><td class="t"><span class="pos">3</span> 🇦🇺 Australia</td><td class="pts">3</td><td>+0</td><td>2</td></tr><tr class="out"><td class="t"><span class="pos">4</span> 🇺🇸 USA</td><td class="pts">2</td><td>-1</td><td>2</td></tr></table></div>
+<div class="group"><h2>Group E</h2><table><tr><th class="t">Team</th><th>Pts</th><th>GD</th><th>GF</th></tr><tr class="q"><td class="t"><span class="pos">1</span> 🇪🇨 Ecuador</td><td class="pts">7</td><td>+3</td><td>4</td></tr><tr class="q"><td class="t"><span class="pos">2</span> 🇩🇪 Germany</td><td class="pts">7</td><td>+3</td><td>4</td></tr><tr class="q3"><td class="t"><span class="pos">3</span> 🇨🇮 Cote d'Ivoire</td><td class="pts">3</td><td>-1</td><td>1</td></tr><tr class="out"><td class="t"><span class="pos">4</span> 🇨🇼 Curaçao</td><td class="pts">0</td><td>-5</td><td>0</td></tr></table></div>
+<div class="group"><h2>Group F</h2><table><tr><th class="t">Team</th><th>Pts</th><th>GD</th><th>GF</th></tr><tr class="q"><td class="t"><span class="pos">1</span> 🇳🇱 Netherlands</td><td class="pts">7</td><td>+2</td><td>4</td></tr><tr class="q"><td class="t"><span class="pos">2</span> 🇯🇵 Japan</td><td class="pts">7</td><td>+2</td><td>3</td></tr><tr class="out"><td class="t"><span class="pos">3</span> 🇸🇪 Sweden</td><td class="pts">1</td><td>-2</td><td>2</td></tr><tr class="out"><td class="t"><span class="pos">4</span> 🇹🇳 Tunisia</td><td class="pts">1</td><td>-2</td><td>1</td></tr></table></div>
+<div class="group"><h2>Group G</h2><table><tr><th class="t">Team</th><th>Pts</th><th>GD</th><th>GF</th></tr><tr class="q"><td class="t"><span class="pos">1</span> 🇧🇪 Belgium</td><td class="pts">7</td><td>+2</td><td>3</td></tr><tr class="q"><td class="t"><span class="pos">2</span> 🇮🇷 Iran</td><td class="pts">5</td><td>+1</td><td>3</td></tr><tr class="q3"><td class="t"><span class="pos">3</span> 🇪🇬 Egypt</td><td class="pts">4</td><td>+0</td><td>2</td></tr><tr class="out"><td class="t"><span class="pos">4</span> 🇳🇿 New Zealand</td><td class="pts">0</td><td>-3</td><td>0</td></tr></table></div>
+<div class="group"><h2>Group H</h2><table><tr><th class="t">Team</th><th>Pts</th><th>GD</th><th>GF</th></tr><tr class="q"><td class="t"><span class="pos">1</span> 🇪🇸 Spain</td><td class="pts">9</td><td>+5</td><td>5</td></tr><tr class="q"><td class="t"><span class="pos">2</span> 🇺🇾 Uruguay</td><td class="pts">6</td><td>+1</td><td>2</td></tr><tr class="out"><td class="t"><span class="pos">3</span> 🇸🇦 Saudi Arabia</td><td class="pts">1</td><td>-3</td><td>1</td></tr><tr class="out"><td class="t"><span class="pos">4</span> 🇨🇻 Cape Verde</td><td class="pts">1</td><td>-3</td><td>1</td></tr></table></div>
+<div class="group"><h2>Group I</h2><table><tr><th class="t">Team</th><th>Pts</th><th>GD</th><th>GF</th></tr><tr class="q"><td class="t"><span class="pos">1</span> 🇫🇷 France</td><td class="pts">7</td><td>+3</td><td>4</td></tr><tr class="q"><td class="t"><span class="pos">2</span> 🇸🇳 Senegal</td><td class="pts">5</td><td>+1</td><td>3</td></tr><tr class="q3"><td class="t"><span class="pos">3</span> 🇳🇴 Norway</td><td class="pts">4</td><td>+0</td><td>2</td></tr><tr class="out"><td class="t"><span class="pos">4</span> 🇮🇶 Iraq</td><td class="pts">0</td><td>-4</td><td>0</td></tr></table></div>
+<div class="group"><h2>Group J</h2><table><tr><th class="t">Team</th><th>Pts</th><th>GD</th><th>GF</th></tr><tr class="q"><td class="t"><span class="pos">1</span> 🇦🇷 Argentina</td><td class="pts">9</td><td>+3</td><td>3</td></tr><tr class="q"><td class="t"><span class="pos">2</span> 🇦🇹 Austria</td><td class="pts">4</td><td>+1</td><td>3</td></tr><tr class="out"><td class="t"><span class="pos">3</span> 🇩🇿 Algeria</td><td class="pts">2</td><td>-1</td><td>2</td></tr><tr class="out"><td class="t"><span class="pos">4</span> 🇯🇴 Jordan</td><td class="pts">1</td><td>-3</td><td>1</td></tr></table></div>
+<div class="group"><h2>Group K</h2><table><tr><th class="t">Team</th><th>Pts</th><th>GD</th><th>GF</th></tr><tr class="q"><td class="t"><span class="pos">1</span> 🇵🇹 Portugal</td><td class="pts">7</td><td>+3</td><td>4</td></tr><tr class="q"><td class="t"><span class="pos">2</span> 🇨🇴 Colombia</td><td class="pts">7</td><td>+2</td><td>3</td></tr><tr class="q3"><td class="t"><span class="pos">3</span> 🇨🇩 DR Congo</td><td class="pts">3</td><td>-1</td><td>1</td></tr><tr class="out"><td class="t"><span class="pos">4</span> 🇺🇿 Uzbekistan</td><td class="pts">0</td><td>-4</td><td>0</td></tr></table></div>
+<div class="group"><h2>Group L</h2><table><tr><th class="t">Team</th><th>Pts</th><th>GD</th><th>GF</th></tr><tr class="q"><td class="t"><span class="pos">1</span> 🏴󠁧󠁢󠁥󠁮󠁧󠁿 England</td><td class="pts">7</td><td>+3</td><td>4</td></tr><tr class="q"><td class="t"><span class="pos">2</span> 🇭🇷 Croatia</td><td class="pts">5</td><td>+1</td><td>3</td></tr><tr class="q3"><td class="t"><span class="pos">3</span> 🇵🇦 Panama</td><td class="pts">4</td><td>+0</td><td>2</td></tr><tr class="out"><td class="t"><span class="pos">4</span> 🇬🇭 Ghana</td><td class="pts">0</td><td>-4</td><td>0</td></tr></table></div>
+</div>
+<footer>
+  Points from predicted scorelines (3 win / 1 draw); tie-break GD, then goals, then ELO.<br>
+  Eight best third-placed teams also advance. Built from <code>data/predictions/ensemble_md*.csv</code>.
+</footer>
+</div></body></html>

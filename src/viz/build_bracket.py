@@ -26,7 +26,7 @@ import sys
 import pandas as pd
 
 sys.path.append(os.path.join(os.path.dirname(__file__)))
-from build_board import TEAM_FLAGS  # noqa: E402
+from build_board import TEAM_FLAGS, nav_html  # noqa: E402
 
 FLAG = lambda t: TEAM_FLAGS.get(t, "🏳️")
 
@@ -180,6 +180,7 @@ HTML = """<!DOCTYPE html>
   <h1>🏆 FIFA World Cup 2026 — Predicted Bracket</h1>
   <div class="sub">Model-seeded knockout simulation from the ensemble's group-stage predictions</div>
 </header>
+__NAV__
 <div class="champ">
   <div class="lbl">Predicted Champion</div>
   <div class="flag">__CF__</div>
@@ -224,6 +225,7 @@ def main():
 
     html = (HTML
             .replace("__DATA__", json.dumps(rounds, ensure_ascii=False))
+            .replace("__NAV__", nav_html("bracket.html"))
             .replace("__CF__", FLAG(champ["team"]))
             .replace("__CN__", champ["team"]))
     os.makedirs("docs", exist_ok=True)

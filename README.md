@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="docs/hero.svg" alt="FIFA World Cup 2026 Predictor" width="100%">
+
 # ⚽ FIFA World Cup 2026 — Match Predictor
 
 **A multi-model machine-learning system that predicts every group-stage match of the 2026 World Cup — scorelines, probabilities, live standings, and a full knockout bracket — and updates itself after each matchday.**
@@ -477,14 +479,17 @@ The prior is strong (weight=10) so one match does not dramatically change estima
     │   │   └── backtest.py                 ← all models + ensemble, leave-one-tournament-out
     │   ├── viz/
     │   │   ├── build_board.py              ← generates the predictions board
+    │   │   ├── build_standings.py          ← generates the standings page
     │   │   └── build_bracket.py            ← generates the knockout bracket
     │   └── updater/
     │       ├── update_predictions.py
     │       └── bayesian_updater.py
     ├── dashboard/
     │   └── app.py                          ← Streamlit 5-page dashboard
-    ├── docs/
-    │   ├── index.html                      ← shareable predictions board (GitHub Pages)
+    ├── docs/                               ← GitHub Pages mini-site (Board · Standings · Bracket)
+    │   ├── hero.svg                        ← README hero banner
+    │   ├── index.html                      ← shareable predictions board
+    │   ├── standings.html                  ← predicted group standings
     │   └── bracket.html                    ← predicted knockout bracket → champion
     ├── notebooks/
     │   └── eda.ipynb                       ← exploratory analysis
@@ -517,6 +522,7 @@ Or run the important files one by one (in this order):
 | 5. See the dashboard | `streamlit run dashboard/app.py` | Opens the interactive predictor in your browser |
 | 5b. Build the board | `python3 src/viz/build_board.py` | Generates `docs/index.html` — a shareable predictions board (hostable on GitHub Pages) |
 | 5c. Build the bracket | `python3 src/viz/build_bracket.py` | Generates `docs/bracket.html` — predicted knockout bracket all the way to a champion |
+| 5c². Build standings | `python3 src/viz/build_standings.py` | Generates `docs/standings.html` — predicted group tables with qualification colours |
 | 5d. Market blend (optional) | `python3 src/ensemble/market_blend.py 2` | Blends the ensemble with bookmaker odds from `data/raw/market_odds.csv` |
 | 6. Check accuracy | `python3 src/evaluation/backtest.py` | Backtests every model on WC 2018 + 2022 |
 | 7. Run the tests | `pytest tests/` | Quick checks that everything is working |

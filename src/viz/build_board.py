@@ -33,6 +33,26 @@ TEAM_FLAGS = {
 }
 
 
+NAV_LINKS = [("index.html", "Board"), ("standings.html", "Standings"),
+             ("bracket.html", "Bracket")]
+
+
+def nav_html(active):
+    """Self-contained (inline-styled) nav bar shared across the pages."""
+    items = []
+    for href, label in NAV_LINKS:
+        on = href == active
+        style = ("background:#2ecc71;color:#06210f;" if on else
+                 "background:#161d2b;color:#9aa7bd;border:1px solid #2a3446;")
+        items.append(
+            f'<a href="{href}" style="{style}text-decoration:none;'
+            f'padding:8px 18px;border-radius:999px;font-size:14px;'
+            f'font-weight:700;">{label}</a>'
+        )
+    return ('<div style="display:flex;gap:8px;justify-content:center;'
+            'margin:4px 0 26px;flex-wrap:wrap;">' + "".join(items) + "</div>")
+
+
 def load_matches():
     rows = []
     for md in (1, 2, 3):
@@ -130,6 +150,7 @@ HTML = """<!DOCTYPE html>
     <div class="sub">Ensemble of 9 models · ~56% backtested result accuracy · host USA · Canada · Mexico</div>
     <div class="pill">Green = home win · Amber = draw · Red = away win</div>
   </header>
+  __NAV__
   <div class="tabs" id="tabs"></div>
   <div class="groups" id="board"></div>
   <footer>
@@ -185,7 +206,9 @@ render(1);
 
 def main():
     matches = load_matches()
-    html = HTML.replace("__DATA__", json.dumps(matches, ensure_ascii=False))
+    html = (HTML
+            .replace("__DATA__", json.dumps(matches, ensure_ascii=False))
+            .replace("__NAV__", nav_html("index.html")))
     os.makedirs("docs", exist_ok=True)
     out = "docs/index.html"
     with open(out, "w", encoding="utf-8") as f:
