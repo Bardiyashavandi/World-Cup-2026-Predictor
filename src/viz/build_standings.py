@@ -16,7 +16,7 @@ import sys
 import pandas as pd
 
 sys.path.append(os.path.join(os.path.dirname(__file__)))
-from build_board import nav_html, TEAM_FLAGS  # noqa: E402
+from build_board import nav_html, TEAM_FLAGS, with_head  # noqa: E402
 from build_bracket import group_tables, qualifiers  # noqa: E402
 
 FLAG = lambda t: TEAM_FLAGS.get(t, "🏳️")
@@ -110,9 +110,9 @@ def main():
             f'<th>GD</th><th>GF</th></tr>' + "".join(rows) + "</table></div>"
         )
 
-    html = (HTML
-            .replace("__NAV__", nav_html("standings.html"))
-            .replace("__BODY__", "\n".join(blocks)))
+    html = with_head(HTML
+                     .replace("__NAV__", nav_html("standings.html"))
+                     .replace("__BODY__", "\n".join(blocks)))
     os.makedirs("docs", exist_ok=True)
     with open("docs/standings.html", "w", encoding="utf-8") as f:
         f.write(html)

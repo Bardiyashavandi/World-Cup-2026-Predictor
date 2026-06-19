@@ -26,7 +26,7 @@ import sys
 import pandas as pd
 
 sys.path.append(os.path.join(os.path.dirname(__file__)))
-from build_board import TEAM_FLAGS, nav_html  # noqa: E402
+from build_board import TEAM_FLAGS, nav_html, with_head  # noqa: E402
 
 FLAG = lambda t: TEAM_FLAGS.get(t, "🏳️")
 
@@ -223,11 +223,11 @@ def main():
     qual = qualifiers(tables)
     rounds, champ = simulate(qual)
 
-    html = (HTML
-            .replace("__DATA__", json.dumps(rounds, ensure_ascii=False))
-            .replace("__NAV__", nav_html("bracket.html"))
-            .replace("__CF__", FLAG(champ["team"]))
-            .replace("__CN__", champ["team"]))
+    html = with_head(HTML
+                     .replace("__DATA__", json.dumps(rounds, ensure_ascii=False))
+                     .replace("__NAV__", nav_html("bracket.html"))
+                     .replace("__CF__", FLAG(champ["team"]))
+                     .replace("__CN__", champ["team"]))
     os.makedirs("docs", exist_ok=True)
     with open("docs/bracket.html", "w", encoding="utf-8") as f:
         f.write(html)

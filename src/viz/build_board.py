@@ -33,8 +33,33 @@ TEAM_FLAGS = {
 }
 
 
-NAV_LINKS = [("index.html", "Board"), ("standings.html", "Standings"),
-             ("bracket.html", "Bracket")]
+SITE = "https://bardiyashavandi.github.io/World-Cup-2026-Predictor"
+
+# Favicon (inline ⚽ emoji) + Open Graph / Twitter social-preview tags.
+# Injected into every page's <head> so the GitHub Pages links render a
+# proper preview card (and the browser tab gets an icon).
+HEAD_META = (
+    '<link rel="icon" href="data:image/svg+xml,'
+    '<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22>'
+    '<text y=%22.9em%22 font-size=%2290%22>%E2%9A%BD</text></svg>">'
+    '<meta property="og:type" content="website">'
+    '<meta property="og:title" content="FIFA World Cup 2026 Predictor">'
+    '<meta property="og:description" content="A 9-model machine-learning '
+    'ensemble forecasting every match of the 2026 World Cup — ~56% '
+    'backtested accuracy, live updating, market-blended.">'
+    f'<meta property="og:image" content="{SITE}/og-image.png">'
+    f'<meta property="og:url" content="{SITE}/">'
+    '<meta name="twitter:card" content="summary_large_image">'
+)
+
+
+def with_head(html):
+    """Insert favicon + social-preview tags right after the <title>."""
+    return html.replace("</title>", "</title>" + HEAD_META, 1)
+
+
+NAV_LINKS = [("index.html", "Board"), ("scorecard.html", "Scorecard"),
+             ("standings.html", "Standings"), ("bracket.html", "Bracket")]
 
 
 def nav_html(active):
@@ -206,9 +231,9 @@ render(1);
 
 def main():
     matches = load_matches()
-    html = (HTML
-            .replace("__DATA__", json.dumps(matches, ensure_ascii=False))
-            .replace("__NAV__", nav_html("index.html")))
+    html = with_head(HTML
+                     .replace("__DATA__", json.dumps(matches, ensure_ascii=False))
+                     .replace("__NAV__", nav_html("index.html")))
     os.makedirs("docs", exist_ok=True)
     out = "docs/index.html"
     with open(out, "w", encoding="utf-8") as f:
