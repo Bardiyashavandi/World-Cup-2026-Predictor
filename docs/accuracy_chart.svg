@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 372" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif">
+  <rect width="820" height="372" rx="16" fill="#161d2b"/>
+  <text x="28" y="38" font-size="20" font-weight="800" fill="#f4f6fb">Backtest result accuracy</text>
+  <text x="28" y="60" font-size="13" fill="#9aa7bd">Predicting Home / Draw / Away — combined WC 2018 + 2022</text>
+
+  <!-- reference lines: random 33.3%, market ~55% (scale: x0=230, 8.6 px/%) -->
+  <g stroke-dasharray="4 4" stroke-width="1.5">
+    <line x1="516" y1="78" x2="516" y2="320" stroke="#5f6b80"/>
+    <line x1="703" y1="78" x2="703" y2="320" stroke="#f1b53d" stroke-opacity="0.7"/>
+  </g>
+  <text x="516" y="338" text-anchor="middle" font-size="11" fill="#5f6b80">random 33%</text>
+  <text x="703" y="338" text-anchor="middle" font-size="11" fill="#f1b53d">market ~55%</text>
+
+  <!-- bars -->
+  <g font-size="13.5" font-weight="600">
+    <!-- Ensemble 56.2 (highlight) -->
+    <text x="222" y="93" text-anchor="end" fill="#f4f6fb">Ensemble</text>
+    <rect x="230" y="80" width="483" height="20" rx="4" fill="#2ecc71"/>
+    <text x="721" y="95" font-size="12.5" font-weight="700" fill="#2ecc71">56.2%</text>
+    <!-- Logistic 56.2 -->
+    <text x="222" y="127" text-anchor="end" fill="#cdd6e6">Logistic Reg.</text>
+    <rect x="230" y="114" width="483" height="20" rx="4" fill="#27a35a"/>
+    <text x="721" y="129" font-size="12.5" font-weight="700" fill="#9aa7bd">56.2%</text>
+    <!-- LightGBM 54.7 -->
+    <text x="222" y="161" text-anchor="end" fill="#cdd6e6">LightGBM</text>
+    <rect x="230" y="148" width="470" height="20" rx="4" fill="#27a35a"/>
+    <text x="708" y="163" font-size="12.5" font-weight="700" fill="#9aa7bd">54.7%</text>
+    <!-- XGBoost 54.7 -->
+    <text x="222" y="195" text-anchor="end" fill="#cdd6e6">XGBoost</text>
+    <rect x="230" y="182" width="470" height="20" rx="4" fill="#27a35a"/>
+    <text x="708" y="197" font-size="12.5" font-weight="700" fill="#9aa7bd">54.7%</text>
+    <!-- Dynamic ELO 50.0 -->
+    <text x="222" y="229" text-anchor="end" fill="#cdd6e6">Dynamic ELO</text>
+    <rect x="230" y="216" width="430" height="20" rx="4" fill="#3a5a78"/>
+    <text x="668" y="231" font-size="12.5" font-weight="700" fill="#9aa7bd">50.0%</text>
+    <!-- ELO 50.0 -->
+    <text x="222" y="263" text-anchor="end" fill="#cdd6e6">ELO</text>
+    <rect x="230" y="250" width="430" height="20" rx="4" fill="#3a5a78"/>
+    <text x="668" y="265" font-size="12.5" font-weight="700" fill="#9aa7bd">50.0%</text>
+    <!-- Historical Average 43.8 -->
+    <text x="222" y="297" text-anchor="end" fill="#cdd6e6">Hist. Average</text>
+    <rect x="230" y="284" width="377" height="20" rx="4" fill="#3a4a63"/>
+    <text x="615" y="299" font-size="12.5" font-weight="700" fill="#9aa7bd">43.8%</text>
+  </g>
+</svg>

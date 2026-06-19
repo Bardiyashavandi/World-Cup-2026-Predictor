@@ -46,31 +46,9 @@ The system is **iterative** — after each matchday it ingests real results, upd
 
 ## 🏗️ System Architecture
 
-    Raw Data (6 sources)
-           ↓
-    Data Processing + Team Name Normalization
-           ↓
-    Feature Engineering (24 features per match)
-           ↓
-    ┌──────────────────────────────────────────────┐
-    │              9 Prediction Models             │
-    │                                              │
-    │  Statistical:       ML:          Specialist: │
-    │  ├─ Static ELO      ├─ XGBoost   └─ Stakes   │
-    │  ├─ Dixon-Coles     ├─ LightGBM              │
-    │  ├─ Hist. Average   ├─ Neural Net            │
-    │  └─ Dynamic ELO     └─ Logistic Reg          │
-    └──────────────────────────────────────────────┘
-           ↓
-    Weighted Ensemble (matchday-aware, backtest-tuned weights)
-           ↓
-    (optional) Market Blend  ←  de-vigged bookmaker odds
-           ↓
-    Predictions + Confidence Scores
-           ↓
-    Dashboard · Predictions Board · Knockout Bracket · CSV outputs
-           ↓
-    ⟳ Live update after each matchday (re-runs the loop)
+<p align="center"><img src="docs/architecture.svg" alt="Pipeline: raw data → features → 9 models → ensemble → market blend → outputs" width="100%"></p>
+
+Raw data → feature engineering (24 features, leak-free) → **9 models** (statistical, ML, and a group-context specialist) → a **backtest-tuned weighted ensemble** → an optional **market blend** → predictions surfaced in the dashboard, board, standings, scorecard and bracket. After each matchday, real results are folded back in and the whole loop re-runs.
 
 ---
 
@@ -354,6 +332,8 @@ Fill `data/raw/market_odds.csv` (`match_id, home_odds, draw_odds, away_odds`) an
 
 Every model is backtested on WC 2018 and WC 2022, training only on data from before each tournament and scored on the **identical 64 fixtures** per tournament. Result is read from the argmax of the summed P(Home)/P(Draw)/P(Away) probabilities. Figures below come straight from `data/processed/backtest_results.csv` (combined 2018 + 2022 average):
 
+<p align="center"><img src="docs/accuracy_chart.svg" alt="Backtest result accuracy by model" width="92%"></p>
+
     Model                  Result%   Exact%   Goal MAE   Brier
     ---------------------  -------   ------   --------   -----
     Ensemble                56.2%    11.8%      0.99     0.194   ← best all-rounder
@@ -489,6 +469,8 @@ The prior is strong (weight=10) so one match does not dramatically change estima
     │   └── app.py                          ← Streamlit 5-page dashboard
     ├── docs/                               ← GitHub Pages mini-site (Board · Standings · Bracket)
     │   ├── hero.svg                        ← README hero banner
+    │   ├── architecture.svg                ← pipeline diagram (README)
+    │   ├── accuracy_chart.svg              ← backtest accuracy chart (README)
     │   ├── og-image.png                    ← social-share preview card
     │   ├── index.html                      ← shareable predictions board
     │   ├── standings.html                  ← predicted group standings
