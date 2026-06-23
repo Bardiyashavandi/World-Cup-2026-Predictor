@@ -49,6 +49,16 @@ def load_all_model_predictions(matchday: int) -> dict:
             if "matchday" in df.columns:
                 df = df[df["matchday"] == matchday]
             result[name] = df
+
+    # Per-matchday files: the final ensemble and the market-blended
+    # predictions (de-vigged bookmaker odds blended with the ensemble).
+    extra = {
+        "Ensemble": f"data/predictions/ensemble_md{matchday}.csv",
+        "Market Blend": f"data/predictions/market_blended_md{matchday}.csv",
+    }
+    for name, path in extra.items():
+        if os.path.exists(path):
+            result[name] = pd.read_csv(path)
     return result
 
 
