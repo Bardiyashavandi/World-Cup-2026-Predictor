@@ -376,6 +376,12 @@ The system was run live through the tournament. How it actually did:
 
 Honest takeaway: the model trusted established sides that went home (Uruguay, South Korea, Scotland, Türkiye) and missed genuine shocks (USA winning Group D, Germany edging Ecuador's group, Cape Verde/Bosnia/Ghana advancing). Those misses are documented openly rather than hidden — the kind of transparency that makes the evaluation trustworthy.
 
+### Probability calibration
+
+Binning every predicted W/D/A probability against how often that outcome actually occurred shows the model is **well-calibrated at low probabilities and slightly under-confident in the mid-range** (when it said 45–65%, those outcomes happened a bit more often than predicted) — i.e. it could afford to back its medium-strong calls harder.
+
+<p align="center"><img src="docs/calibration.svg" alt="Probability calibration / reliability diagram" width="62%"></p>
+
 ---
 
 ## 🔄 Live Updating Pipeline
@@ -525,6 +531,7 @@ Or run the important files one by one (in this order):
 | 5c². Build standings | `python3 src/viz/build_standings.py` | Generates `docs/standings.html` — predicted group tables with qualification colours |
 | 5c³. Build scorecard | `python3 src/viz/build_scorecard.py` | Generates `docs/scorecard.html` — grades predictions vs real results, live |
 | 5c⁴. Title odds | `python3 src/viz/build_title_odds.py` | Monte-Carlo title odds chart (`docs/title_odds.svg`) |
+| 5c⁵. Calibration | `python3 src/viz/build_calibration.py` | Reliability diagram from played matches (`docs/calibration.svg`) |
 | 5d. Market blend (optional) | `python3 src/ensemble/market_blend.py 2` | Blends the ensemble with bookmaker odds from `data/raw/market_odds.csv` |
 | 6. Check accuracy | `python3 src/evaluation/backtest.py` | Backtests every model on WC 2018 + 2022 |
 | 7. Run the tests | `pytest tests/` | Quick checks that everything is working |
