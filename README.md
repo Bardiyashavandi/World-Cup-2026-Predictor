@@ -369,8 +369,10 @@ Three changes put the evaluation on solid ground: every model is now scored on t
 The system was run live through the tournament. How it actually did:
 
 - **Group stage:** correctly predicted **9 / 12 group winners** and **25 / 32 qualifiers (~78%)**. Full per-group breakdown in [`PREDICTIONS_VS_ACTUAL.md`](PREDICTIONS_VS_ACTUAL.md).
-- **Matchday 1 scoreline accuracy:** 46% on the 24 openers — below the 56% backtest, because openers are upset-heavy (Germany 7-1, Sweden 5-1, Australia beating Turkey). See the live **Scorecard** page.
-- **Knockout pick:** from the *real* Round-of-32 draw, the model projects **🇪🇸 Spain as champion** (def. Argentina in the final), using an ELO-plus-current-form knockout model where ties are decisive (extra time / penalties).
+- **Full group stage:** **64% result accuracy across all 72 matches** (Brier 0.184) — *above* the 56% backtest. It started rough (just 46% on the upset-heavy MD1 openers — Germany 7-1, Sweden 5-1, Australia beating Turkey) then recovered strongly as the favourites reasserted in MD2/MD3. Per-match breakdown in [`PREDICTIONS_VS_ACTUAL.md`](PREDICTIONS_VS_ACTUAL.md); live **Scorecard** page grades it match by match.
+- **Knockout pick:** from the *real* Round-of-32 draw, the model makes **Spain the favourite (~28%)**, just ahead of Argentina (~26%) and France (~16%), with a single-path projection of **🇪🇸 Spain def. Argentina** in the final. These come from 50,000 Monte-Carlo runs of the bracket (ELO + group form, decisive ties).
+
+<p align="center"><img src="docs/title_odds.svg" alt="World Cup 2026 title odds (Monte-Carlo)" width="85%"></p>
 
 Honest takeaway: the model trusted established sides that went home (Uruguay, South Korea, Scotland, Türkiye) and missed genuine shocks (USA winning Group D, Germany edging Ecuador's group, Cape Verde/Bosnia/Ghana advancing). Those misses are documented openly rather than hidden — the kind of transparency that makes the evaluation trustworthy.
 
@@ -522,6 +524,7 @@ Or run the important files one by one (in this order):
 | 5c. Build the bracket | `python3 src/viz/build_bracket.py` | Generates `docs/bracket.html` — predicted knockout bracket all the way to a champion |
 | 5c². Build standings | `python3 src/viz/build_standings.py` | Generates `docs/standings.html` — predicted group tables with qualification colours |
 | 5c³. Build scorecard | `python3 src/viz/build_scorecard.py` | Generates `docs/scorecard.html` — grades predictions vs real results, live |
+| 5c⁴. Title odds | `python3 src/viz/build_title_odds.py` | Monte-Carlo title odds chart (`docs/title_odds.svg`) |
 | 5d. Market blend (optional) | `python3 src/ensemble/market_blend.py 2` | Blends the ensemble with bookmaker odds from `data/raw/market_odds.csv` |
 | 6. Check accuracy | `python3 src/evaluation/backtest.py` | Backtests every model on WC 2018 + 2022 |
 | 7. Run the tests | `pytest tests/` | Quick checks that everything is working |

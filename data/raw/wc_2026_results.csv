@@ -1,73 +1,73 @@
 match_id,group,home_team,away_team,date,city,matchday,home_goals,away_goals,played
 1,A,Mexico,South Africa,2026-06-11,Mexico City,1,2.0,0.0,True
 2,A,South Korea,Czech Republic,2026-06-11,Guadalajara,1,2.0,1.0,True
-3,A,Czech Republic,South Africa,2026-06-18,Mexico City,2,,,False
-4,A,Mexico,South Korea,2026-06-18,Guadalajara,2,,,False
-5,A,South Africa,South Korea,2026-06-26,Mexico City,3,,,False
-6,A,Czech Republic,Mexico,2026-06-26,Guadalajara,3,,,False
+3,A,Czech Republic,South Africa,2026-06-18,Mexico City,2,1.0,1.0,True
+4,A,Mexico,South Korea,2026-06-18,Guadalajara,2,1.0,0.0,True
+5,A,South Africa,South Korea,2026-06-26,Mexico City,3,1.0,0.0,True
+6,A,Czech Republic,Mexico,2026-06-26,Guadalajara,3,0.0,3.0,True
 7,B,Canada,Bosnia,2026-06-12,Toronto,1,1.0,1.0,True
 8,B,Qatar,Switzerland,2026-06-13,San Francisco,1,1.0,1.0,True
-9,B,Switzerland,Bosnia,2026-06-18,Toronto,2,,,False
-10,B,Canada,Qatar,2026-06-18,San Francisco,2,,,False
-11,B,Bosnia,Qatar,2026-06-26,Toronto,3,,,False
-12,B,Switzerland,Canada,2026-06-26,San Francisco,3,,,False
+9,B,Switzerland,Bosnia,2026-06-18,Toronto,2,4.0,1.0,True
+10,B,Canada,Qatar,2026-06-18,San Francisco,2,6.0,0.0,True
+11,B,Bosnia,Qatar,2026-06-26,Toronto,3,3.0,1.0,True
+12,B,Switzerland,Canada,2026-06-26,San Francisco,3,2.0,1.0,True
 13,C,Brazil,Morocco,2026-06-13,New York,1,1.0,1.0,True
 14,C,Haiti,Scotland,2026-06-13,Boston,1,0.0,1.0,True
-15,C,Scotland,Morocco,2026-06-19,New York,2,,,False
-16,C,Brazil,Haiti,2026-06-19,Boston,2,,,False
-17,C,Morocco,Haiti,2026-06-26,New York,3,,,False
-18,C,Scotland,Brazil,2026-06-26,Boston,3,,,False
+15,C,Scotland,Morocco,2026-06-19,New York,2,0.0,1.0,True
+16,C,Brazil,Haiti,2026-06-19,Boston,2,3.0,0.0,True
+17,C,Morocco,Haiti,2026-06-26,New York,3,4.0,2.0,True
+18,C,Scotland,Brazil,2026-06-26,Boston,3,0.0,3.0,True
 19,D,USA,Paraguay,2026-06-12,Los Angeles,1,4.0,1.0,True
 20,D,Australia,Turkey,2026-06-13,Vancouver,1,2.0,0.0,True
-21,D,USA,Australia,2026-06-19,Los Angeles,2,,,False
-22,D,Turkey,Paraguay,2026-06-19,Vancouver,2,,,False
-23,D,Paraguay,Australia,2026-06-26,Los Angeles,3,,,False
-24,D,Turkey,USA,2026-06-26,Vancouver,3,,,False
+21,D,USA,Australia,2026-06-19,Los Angeles,2,2.0,0.0,True
+22,D,Turkey,Paraguay,2026-06-19,Vancouver,2,0.0,1.0,True
+23,D,Paraguay,Australia,2026-06-26,Los Angeles,3,0.0,0.0,True
+24,D,Turkey,USA,2026-06-26,Vancouver,3,3.0,2.0,True
 25,E,Germany,Curaçao,2026-06-14,Houston,1,7.0,1.0,True
 26,E,Cote d'Ivoire,Ecuador,2026-06-14,Philadelphia,1,1.0,0.0,True
-27,E,Germany,Cote d'Ivoire,2026-06-20,Houston,2,,,False
-28,E,Ecuador,Curaçao,2026-06-20,Philadelphia,2,,,False
-29,E,Curaçao,Cote d'Ivoire,2026-06-26,Houston,3,,,False
-30,E,Ecuador,Germany,2026-06-26,Philadelphia,3,,,False
+27,E,Germany,Cote d'Ivoire,2026-06-20,Houston,2,2.0,1.0,True
+28,E,Ecuador,Curaçao,2026-06-20,Philadelphia,2,0.0,0.0,True
+29,E,Curaçao,Cote d'Ivoire,2026-06-26,Houston,3,0.0,2.0,True
+30,E,Ecuador,Germany,2026-06-26,Philadelphia,3,2.0,1.0,True
 31,F,Netherlands,Japan,2026-06-14,Dallas,1,2.0,2.0,True
 32,F,Sweden,Tunisia,2026-06-14,Monterrey,1,5.0,1.0,True
-33,F,Netherlands,Sweden,2026-06-20,Dallas,2,,,False
-34,F,Tunisia,Japan,2026-06-20,Monterrey,2,,,False
-35,F,Japan,Sweden,2026-06-26,Dallas,3,,,False
-36,F,Tunisia,Netherlands,2026-06-26,Monterrey,3,,,False
+33,F,Netherlands,Sweden,2026-06-20,Dallas,2,5.0,1.0,True
+34,F,Tunisia,Japan,2026-06-20,Monterrey,2,0.0,4.0,True
+35,F,Japan,Sweden,2026-06-26,Dallas,3,1.0,1.0,True
+36,F,Tunisia,Netherlands,2026-06-26,Monterrey,3,1.0,3.0,True
 37,G,Belgium,Egypt,2026-06-15,Seattle,1,1.0,1.0,True
 38,G,Iran,New Zealand,2026-06-15,Los Angeles,1,2.0,2.0,True
-39,G,Belgium,Iran,2026-06-21,Seattle,2,,,False
-40,G,New Zealand,Egypt,2026-06-21,Los Angeles,2,,,False
-41,G,Egypt,Iran,2026-06-26,Seattle,3,,,False
-42,G,New Zealand,Belgium,2026-06-26,Los Angeles,3,,,False
+39,G,Belgium,Iran,2026-06-21,Seattle,2,0.0,0.0,True
+40,G,New Zealand,Egypt,2026-06-21,Los Angeles,2,1.0,3.0,True
+41,G,Egypt,Iran,2026-06-26,Seattle,3,1.0,1.0,True
+42,G,New Zealand,Belgium,2026-06-26,Los Angeles,3,1.0,5.0,True
 43,H,Spain,Cape Verde,2026-06-15,Atlanta,1,0.0,0.0,True
 44,H,Saudi Arabia,Uruguay,2026-06-15,Miami,1,1.0,1.0,True
-45,H,Spain,Saudi Arabia,2026-06-21,Atlanta,2,,,False
-46,H,Uruguay,Cape Verde,2026-06-21,Miami,2,,,False
-47,H,Cape Verde,Saudi Arabia,2026-06-26,Atlanta,3,,,False
-48,H,Uruguay,Spain,2026-06-26,Miami,3,,,False
+45,H,Spain,Saudi Arabia,2026-06-21,Atlanta,2,4.0,0.0,True
+46,H,Uruguay,Cape Verde,2026-06-21,Miami,2,2.0,2.0,True
+47,H,Cape Verde,Saudi Arabia,2026-06-26,Atlanta,3,0.0,0.0,True
+48,H,Uruguay,Spain,2026-06-26,Miami,3,0.0,1.0,True
 49,I,France,Senegal,2026-06-16,New York,1,3.0,1.0,True
 50,I,Iraq,Norway,2026-06-16,Boston,1,1.0,4.0,True
-51,I,France,Iraq,2026-06-22,New York,2,,,False
-52,I,Norway,Senegal,2026-06-22,Boston,2,,,False
-53,I,Senegal,Iraq,2026-06-26,New York,3,,,False
-54,I,Norway,France,2026-06-26,Boston,3,,,False
+51,I,France,Iraq,2026-06-22,New York,2,3.0,0.0,True
+52,I,Norway,Senegal,2026-06-22,Boston,2,3.0,2.0,True
+53,I,Senegal,Iraq,2026-06-26,New York,3,5.0,0.0,True
+54,I,Norway,France,2026-06-26,Boston,3,1.0,4.0,True
 55,J,Argentina,Algeria,2026-06-16,Kansas City,1,3.0,0.0,True
 56,J,Austria,Jordan,2026-06-16,San Francisco,1,3.0,1.0,True
-57,J,Argentina,Austria,2026-06-22,Kansas City,2,,,False
-58,J,Jordan,Algeria,2026-06-22,San Francisco,2,,,False
-59,J,Algeria,Austria,2026-06-26,Kansas City,3,,,False
-60,J,Jordan,Argentina,2026-06-26,San Francisco,3,,,False
+57,J,Argentina,Austria,2026-06-22,Kansas City,2,2.0,0.0,True
+58,J,Jordan,Algeria,2026-06-22,San Francisco,2,1.0,2.0,True
+59,J,Algeria,Austria,2026-06-26,Kansas City,3,3.0,3.0,True
+60,J,Jordan,Argentina,2026-06-26,San Francisco,3,1.0,3.0,True
 61,K,Portugal,DR Congo,2026-06-17,Houston,1,1.0,1.0,True
 62,K,Uzbekistan,Colombia,2026-06-17,Dallas,1,1.0,3.0,True
-63,K,Portugal,Uzbekistan,2026-06-23,Houston,2,,,False
-64,K,Colombia,DR Congo,2026-06-23,Dallas,2,,,False
-65,K,DR Congo,Uzbekistan,2026-06-27,Houston,3,,,False
-66,K,Colombia,Portugal,2026-06-27,Dallas,3,,,False
+63,K,Portugal,Uzbekistan,2026-06-23,Houston,2,5.0,0.0,True
+64,K,Colombia,DR Congo,2026-06-23,Dallas,2,1.0,0.0,True
+65,K,DR Congo,Uzbekistan,2026-06-27,Houston,3,3.0,1.0,True
+66,K,Colombia,Portugal,2026-06-27,Dallas,3,0.0,0.0,True
 67,L,England,Croatia,2026-06-17,Dallas,1,4.0,2.0,True
 68,L,Ghana,Panama,2026-06-17,Atlanta,1,1.0,0.0,True
-69,L,England,Ghana,2026-06-23,Dallas,2,,,False
-70,L,Panama,Croatia,2026-06-23,Atlanta,2,,,False
-71,L,Croatia,Ghana,2026-06-27,Dallas,3,,,False
-72,L,Panama,England,2026-06-27,Atlanta,3,,,False
+69,L,England,Ghana,2026-06-23,Dallas,2,0.0,0.0,True
+70,L,Panama,Croatia,2026-06-23,Atlanta,2,0.0,1.0,True
+71,L,Croatia,Ghana,2026-06-27,Dallas,3,2.0,1.0,True
+72,L,Panama,England,2026-06-27,Atlanta,3,0.0,2.0,True
