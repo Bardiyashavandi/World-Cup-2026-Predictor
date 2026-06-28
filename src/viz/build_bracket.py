@@ -136,6 +136,67 @@ def simulate(qual):
     return rounds, champion
 
 
+# ── Real knockout bracket (actual R32 results) ───────────
+# Validated Round-of-32 matchups in official bracket order, so adjacent
+# pairs feed the right Round-of-16 ties. Each tuple is (teamA, teamB).
+REAL_R32 = [
+    ("Germany", "Paraguay"), ("France", "Sweden"),
+    ("South Africa", "Canada"), ("Netherlands", "Morocco"),
+    ("Portugal", "Croatia"), ("Spain", "Austria"),
+    ("USA", "Bosnia"), ("Belgium", "Senegal"),
+    ("Brazil", "Japan"), ("Cote d'Ivoire", "Norway"),
+    ("Mexico", "Ecuador"), ("England", "DR Congo"),
+    ("Argentina", "Cape Verde"), ("Australia", "Egypt"),
+    ("Switzerland", "Algeria"), ("Colombia", "Ghana"),
+]
+
+# Actual group-stage points (form signal for the knockout model).
+GROUP_PTS = {
+    "Mexico": 9, "South Africa": 4, "Switzerland": 7, "Canada": 4,
+    "Brazil": 7, "Morocco": 7, "USA": 6, "Australia": 4, "Germany": 6,
+    "Cote d'Ivoire": 6, "Netherlands": 7, "Japan": 5, "Belgium": 5,
+    "Egypt": 4, "Spain": 7, "Cape Verde": 4, "France": 9, "Norway": 6,
+    "Argentina": 9, "Austria": 6, "Colombia": 7, "Portugal": 4,
+    "England": 7, "Croatia": 6, "Bosnia": 4, "Paraguay": 4,
+    "Ecuador": 4, "Sweden": 4, "DR Congo": 4, "Ghana": 4,
+    "Senegal": 3, "Algeria": 3,
+}
+
+
+def real_knockout(elo):
+    """Simulate the actual R32 bracket to a champion.
+
+    Knockout-accuracy upgrade vs the group-stage model:
+      • strength = ELO + a form bonus from *this tournament's* group points
+        (rewards teams in form right now, which the static model misses);
+      • ties are decisive (extra-time / penalties) — no draws — so the
+        higher-strength side always advances, and the % shown is its
+        Elo-derived win probability.
+    """
+    def strength(team):
+        return elo.get(team, 1500) + 5.0 * GROUP_PTS.get(team, 0)
+
+    bracket = [{"team": a} for pair in REAL_R32 for a in pair]
+    round_names = {32: "Round of 32", 16: "Round of 16",
+                   8: "Quarter-finals", 4: "Semi-finals", 2: "Final"}
+    rounds = []
+    current = bracket
+    while len(current) > 1:
+        ties, nxt = [], []
+        for i in range(0, len(current), 2):
+            a, b = current[i]["team"], current[i + 1]["team"]
+            sa, sb = strength(a), strength(b)
+            p = win_prob(sa, sb)            # P(a wins) on adjusted strength
+            w = a if sa >= sb else b
+            ties.append({"a": a, "af": FLAG(a), "b": b, "bf": FLAG(b),
+                         "w": w, "conf": round(max(p, 1 - p) * 100)})
+            nxt.append({"team": w})
+        rounds.append({"name": round_names.get(len(current),
+                       f"Round of {len(current)}"), "ties": ties})
+        current = nxt
+    return rounds, current[0]
+
+
 # ── 4. Render ────────────────────────────────────────────
 
 HTML = """<!DOCTYPE html>
@@ -178,7 +239,7 @@ HTML = """<!DOCTYPE html>
 </style></head><body>
 <header>
   <h1>🏆 FIFA World Cup 2026 — Predicted Bracket</h1>
-  <div class="sub">Model-seeded knockout simulation from the ensemble's group-stage predictions</div>
+  <div class="sub">Predicted from the actual Round-of-32 draw · ELO + this tournament's group form</div>
 </header>
 __NAV__
 <div class="champ">
@@ -188,9 +249,8 @@ __NAV__
 </div>
 <div class="scroll"><div class="bracket" id="bracket"></div></div>
 <footer>
-  Higher-rated team advances each tie; the % is its Elo win probability.<br>
-  A model-seeded simulation — not the official FIFA bracket slotting. Built from
-  <code>data/predictions/ensemble_md*.csv</code>.
+  Real Round-of-32 matchups; higher-strength team advances (knockouts are decisive).<br>
+  Strength = ELO + group-stage form. The % is the Elo-derived win probability.
 </footer>
 <script>
 const ROUNDS = __DATA__;
@@ -219,9 +279,7 @@ wrap.appendChild(cc);
 def main():
     elo = pd.read_csv("data/processed/elo_clean.csv").set_index(
         "country")["rating"].to_dict()
-    tables = group_tables(elo)
-    qual = qualifiers(tables)
-    rounds, champ = simulate(qual)
+    rounds, champ = real_knockout(elo)
 
     html = with_head(HTML
                      .replace("__DATA__", json.dumps(rounds, ensure_ascii=False))
@@ -232,10 +290,11 @@ def main():
     with open("docs/bracket.html", "w", encoding="utf-8") as f:
         f.write(html)
 
-    print(f"✅ Wrote docs/bracket.html — predicted champion: "
-          f"{champ['team']}")
-    print("   Group winners:",
-          ", ".join(t[0]["team"] for t in tables.values()))
+    print(f"✅ Wrote docs/bracket.html — predicted champion: {champ['team']}")
+    for r in rounds:
+        if r["name"] in ("Quarter-finals", "Semi-finals", "Final"):
+            print(f"   {r['name']}: " +
+                  " · ".join(f"{t['w']}" for t in r["ties"]))
 
 
 if __name__ == "__main__":

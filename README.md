@@ -364,6 +364,18 @@ Three changes put the evaluation on solid ground: every model is now scored on t
 
 ---
 
+## 📋 Live Results & Accuracy (2026 tournament)
+
+The system was run live through the tournament. How it actually did:
+
+- **Group stage:** correctly predicted **9 / 12 group winners** and **25 / 32 qualifiers (~78%)**. Full per-group breakdown in [`PREDICTIONS_VS_ACTUAL.md`](PREDICTIONS_VS_ACTUAL.md).
+- **Matchday 1 scoreline accuracy:** 46% on the 24 openers — below the 56% backtest, because openers are upset-heavy (Germany 7-1, Sweden 5-1, Australia beating Turkey). See the live **Scorecard** page.
+- **Knockout pick:** from the *real* Round-of-32 draw, the model projects **🇪🇸 Spain as champion** (def. Argentina in the final), using an ELO-plus-current-form knockout model where ties are decisive (extra time / penalties).
+
+Honest takeaway: the model trusted established sides that went home (Uruguay, South Korea, Scotland, Türkiye) and missed genuine shocks (USA winning Group D, Germany edging Ecuador's group, Cape Verde/Bosnia/Ghana advancing). Those misses are documented openly rather than hidden — the kind of transparency that makes the evaluation trustworthy.
+
+---
+
 ## 🔄 Live Updating Pipeline
 
 The system is designed for live tournament use. After each matchday:
@@ -485,6 +497,7 @@ The prior is strong (weight=10) so one match does not dramatically change estima
     ├── .github/workflows/
     │   └── ci.yml                          ← runs tests on push / PR
     ├── run_all.sh                          ← one-command full pipeline
+    ├── PREDICTIONS_VS_ACTUAL.md            ← group-stage predictions vs real results
     ├── requirements.txt
     └── README.md
 
