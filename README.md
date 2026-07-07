@@ -483,7 +483,11 @@ The prior is strong (weight=10) so one match does not dramatically change estima
     │   │   ├── build_board.py              ← generates the predictions board
     │   │   ├── build_standings.py          ← generates the standings page
     │   │   ├── build_scorecard.py          ← grades predictions vs real results
-    │   │   └── build_bracket.py            ← generates the knockout bracket
+    │   │   ├── build_title_odds.py         ← Monte-Carlo title-odds chart
+    │   │   ├── build_calibration.py        ← reliability / calibration chart
+    │   │   └── build_bracket.py            ← real knockout bracket → champion
+    │   ├── analysis/
+    │   │   └── betting_edge.py             ← model vs market ROI / value-bet test
     │   └── updater/
     │       ├── update_predictions.py
     │       └── bayesian_updater.py
@@ -493,6 +497,8 @@ The prior is strong (weight=10) so one match does not dramatically change estima
     │   ├── hero.svg                        ← README hero banner
     │   ├── architecture.svg                ← pipeline diagram (README)
     │   ├── accuracy_chart.svg              ← backtest accuracy chart (README)
+    │   ├── title_odds.svg                  ← Monte-Carlo title odds (README)
+    │   ├── calibration.svg                 ← reliability diagram (README)
     │   ├── og-image.png                    ← social-share preview card
     │   ├── index.html                      ← shareable predictions board
     │   ├── standings.html                  ← predicted group standings
