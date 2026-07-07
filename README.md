@@ -4,16 +4,17 @@
 
 # ⚽ FIFA World Cup 2026 — Match Predictor
 
-**A multi-model machine-learning system that predicts every group-stage match of the 2026 World Cup — scorelines, probabilities, live standings, and a full knockout bracket — and updates itself after each matchday.**
+**A multi-model machine-learning system that forecasts the entire 2026 World Cup — every group match, live standings, and a full knockout bracket to a champion — updating itself as the real results come in.**
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![Models](https://img.shields.io/badge/Models-9-green)
-![Accuracy](https://img.shields.io/badge/Backtest%20Accuracy-56.2%25-brightgreen)
+![Backtest](https://img.shields.io/badge/Backtest-56.2%25-brightgreen)
+![Live accuracy](https://img.shields.io/badge/Live%20accuracy-64%25-brightgreen)
 ![Tests](https://img.shields.io/badge/tests-passing-brightgreen)
 ![CI](https://github.com/Bardiyashavandi/world-cup-2026-predictor/actions/workflows/ci.yml/badge.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
-[**🌐 Live Predictions Board**](https://bardiyashavandi.github.io/World-Cup-2026-Predictor/) · [**🏆 Predicted Bracket**](https://bardiyashavandi.github.io/World-Cup-2026-Predictor/bracket.html)
+[**🌐 Board**](https://bardiyashavandi.github.io/World-Cup-2026-Predictor/) · [**📈 Scorecard**](https://bardiyashavandi.github.io/World-Cup-2026-Predictor/scorecard.html) · [**📊 Standings**](https://bardiyashavandi.github.io/World-Cup-2026-Predictor/standings.html) · [**🏆 Bracket**](https://bardiyashavandi.github.io/World-Cup-2026-Predictor/bracket.html)
 
 </div>
 
@@ -22,11 +23,12 @@
 ## ✨ Highlights
 
 - **9 models → one ensemble** — statistics (ELO, Dynamic ELO, Dixon-Coles, Historical Average), gradient boosting (XGBoost, LightGBM), a neural network, logistic regression, and a group-context "stakes" model.
-- **~56% backtested result accuracy** — on par with professional betting markets, validated leak-free on WC 2018 & 2022 (every model scored on the identical 64 fixtures).
-- **Live updating that works** — enter a matchday's results and the pipeline folds them into the data, rebuilds features and standings, and re-predicts the rest of the tournament.
-- **Market blending** — optionally fuse the model with bookmaker odds via a de-vigged logarithmic opinion pool.
-- **Shareable visuals** — an interactive predictions board and an auto-generated knockout bracket (host free on GitHub Pages), plus a 5-page Streamlit dashboard.
-- **Engineered properly** — smoke-test suite, GitHub Actions CI, one-command pipeline, and transparent, honest evaluation.
+- **Proven on the real tournament** — **64% result accuracy across all 72 group matches**, called **9/12 group winners** and **78% of qualifiers** correctly (56% leak-free backtest on WC 2018/2022 — at betting-market level).
+- **Live updating that works** — enter a matchday's results and the pipeline folds them into the data, rebuilds features and standings, and re-predicts the rest of the tournament, right through the knockouts.
+- **Full knockout forecast** — a real Round-of-32 bracket simulated to a champion, plus **Monte-Carlo title odds** (Spain 28% · Argentina 26% · France 16%).
+- **Market-aware** — fuse the model with bookmaker odds (de-vigged logarithmic opinion pool) and a betting-edge simulator that tests it against the market.
+- **A live mini-site + rich analytics** — 4 shareable pages (board · scorecard · standings · bracket, on GitHub Pages), a 5-page Streamlit dashboard, and backtest / calibration / title-odds charts.
+- **Engineered properly** — smoke-test suite, GitHub Actions CI, one-command pipeline, and transparent, honest evaluation (mistakes documented, not hidden).
 
 ---
 
@@ -532,6 +534,7 @@ Or run the important files one by one (in this order):
 | 5c³. Build scorecard | `python3 src/viz/build_scorecard.py` | Generates `docs/scorecard.html` — grades predictions vs real results, live |
 | 5c⁴. Title odds | `python3 src/viz/build_title_odds.py` | Monte-Carlo title odds chart (`docs/title_odds.svg`) |
 | 5c⁵. Calibration | `python3 src/viz/build_calibration.py` | Reliability diagram from played matches (`docs/calibration.svg`) |
+| 5c⁶. Betting edge | `python3 src/analysis/betting_edge.py` | Tests the model's picks vs the market (ROI, value bets) |
 | 5d. Market blend (optional) | `python3 src/ensemble/market_blend.py 2` | Blends the ensemble with bookmaker odds from `data/raw/market_odds.csv` |
 | 6. Check accuracy | `python3 src/evaluation/backtest.py` | Backtests every model on WC 2018 + 2022 |
 | 7. Run the tests | `pytest tests/` | Quick checks that everything is working |
