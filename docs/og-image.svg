@@ -35,7 +35,7 @@
     <rect x="356" y="452" width="180" height="58" rx="29" fill="#161d2b" stroke="#2a3446"/>
     <text x="446" y="490" text-anchor="middle" fill="#2ecc71">9 models</text>
     <rect x="552" y="452" width="240" height="58" rx="29" fill="#161d2b" stroke="#2a3446"/>
-    <text x="672" y="490" text-anchor="middle" fill="#2ecc71">56% accuracy</text>
+    <text x="672" y="490" text-anchor="middle" fill="#2ecc71">64% accuracy</text>
     <rect x="808" y="452" width="180" height="58" rx="29" fill="#161d2b" stroke="#2a3446"/>
     <text x="898" y="490" text-anchor="middle" fill="#2ecc71">live updating</text>
   </g>
