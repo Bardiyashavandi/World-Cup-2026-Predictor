@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World Cup 2026 — Predicted Bracket</title><link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%E2%9A%BD</text></svg>"><meta property="og:type" content="website"><meta property="og:title" content="FIFA World Cup 2026 Predictor"><meta property="og:description" content="A 9-model machine-learning ensemble forecasting every match of the 2026 World Cup — ~56% backtested accuracy, live updating, market-blended."><meta property="og:image" content="https://bardiyashavandi.github.io/World-Cup-2026-Predictor/og-image.png"><meta property="og:url" content="https://bardiyashavandi.github.io/World-Cup-2026-Predictor/"><meta name="twitter:card" content="summary_large_image">
+<style>
+  :root{--bg:#0e1117;--panel:#161d2b;--panel2:#1d2636;--line:#2a3446;
+    --text:#f4f6fb;--muted:#9aa7bd;--green:#2ecc71;--gold:#f1c40f;}
+  *{box-sizing:border-box;} body{margin:0;color:var(--text);
+    background:radial-gradient(1200px 600px at 50% -10%,#16321f 0,transparent 60%),var(--bg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    padding:30px 16px 60px;}
+  header{text-align:center;margin-bottom:8px;}
+  h1{font-size:28px;margin:0 0 6px;} .sub{color:var(--muted);font-size:14px;}
+  .champ{margin:24px auto 30px;max-width:420px;text-align:center;
+    background:linear-gradient(180deg,rgba(241,196,15,.16),rgba(241,196,15,.04));
+    border:1px solid rgba(241,196,15,.45);border-radius:16px;padding:20px;}
+  .champ .lbl{color:var(--gold);font-size:12px;letter-spacing:2px;text-transform:uppercase;}
+  .champ .flag{font-size:58px;margin:6px 0;} .champ .name{font-size:26px;font-weight:800;}
+  .scroll{overflow-x:auto;padding-bottom:12px;}
+  .bracket{display:flex;gap:14px;min-width:max-content;margin:0 auto;justify-content:center;
+    align-items:stretch;}
+  .col{display:flex;flex-direction:column;min-width:188px;}
+  .col h3{flex:none;text-align:center;font-size:11px;letter-spacing:1.4px;
+    text-transform:uppercase;color:var(--muted);margin:0 0 10px;}
+  .col-body{flex:1;display:flex;flex-direction:column;justify-content:space-around;}
+  .tie{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+    overflow:hidden;margin:7px 0;}
+  .side{display:flex;align-items:center;gap:7px;padding:7px 10px;font-size:13px;
+    border-bottom:1px solid var(--line);}
+  .side:last-child{border-bottom:none;}
+  .side .flag{font-size:16px;} .side .nm{flex:1;white-space:nowrap;overflow:hidden;
+    text-overflow:ellipsis;}
+  .side.win{background:rgba(46,204,113,.12);font-weight:700;}
+  .side.win .nm{color:var(--green);}
+  .side.lose{opacity:.5;}
+  .conf{font-size:10px;color:var(--muted);padding:3px 10px 6px;text-align:right;}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:30px;line-height:1.6;}
+</style></head><body>
+<header>
+  <h1>🔮 FIFA World Cup 2026 — Pre-Tournament Bracket</h1>
+  <div class="sub">The model's own pre-tournament forecast (from its predicted group standings) — before any real results</div>
+</header>
+<div style="display:flex;gap:8px;justify-content:center;margin:4px 0 26px;flex-wrap:wrap;"><a href="index.html" style="background:#161d2b;color:#9aa7bd;border:1px solid #2a3446;text-decoration:none;padding:8px 18px;border-radius:999px;font-size:14px;font-weight:700;">Board</a><a href="scorecard.html" style="background:#161d2b;color:#9aa7bd;border:1px solid #2a3446;text-decoration:none;padding:8px 18px;border-radius:999px;font-size:14px;font-weight:700;">Scorecard</a><a href="standings.html" style="background:#161d2b;color:#9aa7bd;border:1px solid #2a3446;text-decoration:none;padding:8px 18px;border-radius:999px;font-size:14px;font-weight:700;">Standings</a><a href="bracket.html" style="background:#2ecc71;color:#06210f;text-decoration:none;padding:8px 18px;border-radius:999px;font-size:14px;font-weight:700;">Bracket</a></div>
+<div class="champ">
+  <div class="lbl">Predicted Champion</div>
+  <div class="flag">🇪🇸</div>
+  <div class="name">Spain</div>
+</div>
+<div class="scroll"><div class="bracket" id="bracket"></div></div>
+<footer>
+  Real Round-of-32 matchups; higher-strength team advances (knockouts are decisive).<br>
+  Strength = ELO + group-stage form. The % is the Elo-derived win probability.
+</footer>
+<script>
+const ROUNDS = [{"name": "Round of 32", "ties": [{"a": "Spain", "af": "🇪🇸", "b": "DR Congo", "bf": "🇨🇩", "w": "Spain", "conf": 95}, {"a": "Switzerland", "af": "🇨🇭", "b": "Senegal", "bf": "🇸🇳", "w": "Switzerland", "conf": 52}, {"a": "Netherlands", "af": "🇳🇱", "b": "Scotland", "bf": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "w": "Netherlands", "conf": 75}, {"a": "Ecuador", "af": "🇪🇨", "b": "Australia", "bf": "🇦🇺", "w": "Ecuador", "conf": 70}, {"a": "England", "af": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "b": "Czech Republic", "bf": "🇨🇿", "w": "England", "conf": 84}, {"a": "Japan", "af": "🇯🇵", "b": "Paraguay", "bf": "🇵🇾", "w": "Japan", "conf": 60}, {"a": "Brazil", "af": "🇧🇷", "b": "Panama", "bf": "🇵🇦", "w": "Brazil", "conf": 81}, {"a": "Norway", "af": "🇳🇴", "b": "Austria", "bf": "🇦🇹", "w": "Norway", "conf": 62}, {"a": "Argentina", "af": "🇦🇷", "b": "Cote d'Ivoire", "bf": "🇨🇮", "w": "Argentina", "conf": 93}, {"a": "Uruguay", "af": "🇺🇾", "b": "Belgium", "bf": "🇧🇪", "w": "Uruguay", "conf": 54}, {"a": "Colombia", "af": "🇨🇴", "b": "Iran", "bf": "🇮🇷", "w": "Colombia", "conf": 78}, {"a": "Croatia", "af": "🇭🇷", "b": "Canada", "bf": "🇨🇦", "w": "Croatia", "conf": 70}, {"a": "France", "af": "🇫🇷", "b": "Egypt", "bf": "🇪🇬", "w": "France", "conf": 91}, {"a": "Turkey", "af": "🇹🇷", "b": "Mexico", "bf": "🇲🇽", "w": "Turkey", "conf": 56}, {"a": "Portugal", "af": "🇵🇹", "b": "South Korea", "bf": "🇰🇷", "w": "Portugal", "conf": 79}, {"a": "Germany", "af": "🇩🇪", "b": "Morocco", "bf": "🇲🇦", "w": "Germany", "conf": 64}]}, {"name": "Round of 16", "ties": [{"a": "Spain", "af": "🇪🇸", "b": "Switzerland", "bf": "🇨🇭", "w": "Spain", "conf": 83}, {"a": "Netherlands", "af": "🇳🇱", "b": "Ecuador", "bf": "🇪🇨", "w": "Netherlands", "conf": 54}, {"a": "England", "af": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "b": "Japan", "bf": "🇯🇵", "w": "England", "conf": 66}, {"a": "Brazil", "af": "🇧🇷", "b": "Norway", "bf": "🇳🇴", "w": "Brazil", "conf": 60}, {"a": "Argentina", "af": "🇦🇷", "b": "Uruguay", "bf": "🇺🇾", "w": "Argentina", "conf": 78}, {"a": "Colombia", "af": "🇨🇴", "b": "Croatia", "bf": "🇭🇷", "w": "Colombia", "conf": 56}, {"a": "France", "af": "🇫🇷", "b": "Turkey", "bf": "🇹🇷", "w": "France", "conf": 74}, {"a": "Portugal", "af": "🇵🇹", "b": "Germany", "bf": "🇩🇪", "w": "Portugal", "conf": 59}]}, {"name": "Quarter-finals", "ties": [{"a": "Spain", "af": "🇪🇸", "b": "Netherlands", "bf": "🇳🇱", "w": "Spain", "conf": 76}, {"a": "England", "af": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "b": "Brazil", "bf": "🇧🇷", "w": "England", "conf": 55}, {"a": "Argentina", "af": "🇦🇷", "b": "Colombia", "bf": "🇨🇴", "w": "Argentina", "conf": 69}, {"a": "France", "af": "🇫🇷", "b": "Portugal", "bf": "🇵🇹", "w": "France", "conf": 64}]}, {"name": "Semi-finals", "ties": [{"a": "Spain", "af": "🇪🇸", "b": "England", "bf": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "w": "Spain", "conf": 70}, {"a": "Argentina", "af": "🇦🇷", "b": "France", "bf": "🇫🇷", "w": "Argentina", "conf": 55}]}, {"name": "Final", "ties": [{"a": "Spain", "af": "🇪🇸", "b": "Argentina", "bf": "🇦🇷", "w": "Spain", "conf": 57}]}];
+const wrap = document.getElementById("bracket");
+ROUNDS.forEach(r=>{
+  const col=document.createElement("div"); col.className="col";
+  col.innerHTML=`<h3>${r.name}</h3><div class="col-body">`+r.ties.map(t=>`
+    <div class="item">
+      <div class="tie">
+        <div class="side ${t.w===t.a?'win':'lose'}"><span class="flag">${t.af}</span><span class="nm">${t.a}</span></div>
+        <div class="side ${t.w===t.b?'win':'lose'}"><span class="flag">${t.bf}</span><span class="nm">${t.b}</span></div>
+      </div>
+      <div class="conf">${t.conf}% ${t.w}</div>
+    </div>`).join("")+`</div>`;
+  wrap.appendChild(col);
+});
+// champion column
+const cc=document.createElement("div"); cc.className="col";
+cc.innerHTML=`<h3>Champion</h3><div class="col-body"><div class="item"><div class="tie"><div class="side win">
+  <span class="flag">🇪🇸</span><span class="nm">Spain</span></div></div></div></div>`;
+wrap.appendChild(cc);
+</script></body></html>
