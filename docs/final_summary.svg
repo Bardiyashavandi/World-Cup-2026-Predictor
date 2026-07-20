@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" font-family="Helvetica,Arial,sans-serif">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0c2a18"/><stop offset="0.5" stop-color="#0e1117"/><stop offset="1" stop-color="#0e1117"/></linearGradient>
+<linearGradient id="gold" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f1c40f"/><stop offset="1" stop-color="#f39c12"/></linearGradient></defs>
+<rect width="1200" height="675" rx="22" fill="url(#bg)"/>
+<text x="60" y="78" font-size="38" font-weight="800" fill="#f4f6fb">World Cup 2026: my model vs reality</text>
+<text x="60" y="112" font-size="18" fill="#9aa7bd">A 9-model machine-learning ensemble · predicted before the knockouts · here's how it did</text>
+
+<circle cx="85" cy="190" r="15" fill="#2ecc71"/><polyline points="78,190 83,196 93,184" fill="none" stroke="#0e1117" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><text x="120" y="199" font-size="27" font-weight="800" fill="#f4f6fb">Champion — <tspan fill="#2ecc71">Spain</tspan>   ✔ called it</text>
+<circle cx="85" cy="258" r="15" fill="#2ecc71"/><polyline points="78,258 83,264 93,252" fill="none" stroke="#0e1117" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><text x="120" y="267" font-size="27" font-weight="800" fill="#f4f6fb">Runner-up — <tspan fill="#2ecc71">Argentina</tspan>   ✔ called it</text>
+<circle cx="85" cy="326" r="15" fill="#2ecc71"/><polyline points="78,326 83,332 93,320" fill="none" stroke="#0e1117" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><text x="120" y="335" font-size="27" font-weight="800" fill="#f4f6fb">Final Four — <tspan fill="#2ecc71">Spain · France · England · Argentina</tspan></text>
+<text x="120" y="366" font-size="18" fill="#9aa7bd">all four semifinalists correct — 4/4</text>
+
+<line x1="60" y1="420" x2="1140" y2="420" stroke="#2a3446"/>
+<text x="60" y="470" font-size="20" font-weight="700" fill="#9aa7bd">GROUP STAGE</text>
+<text x="60" y="512" font-size="30" font-weight="800" fill="#2ecc71">9/12</text><text x="60" y="540" font-size="15" fill="#9aa7bd">group winners</text>
+<text x="320" y="512" font-size="30" font-weight="800" fill="#2ecc71">25/32</text><text x="320" y="540" font-size="15" fill="#9aa7bd">qualifiers (78%)</text>
+<text x="620" y="512" font-size="30" font-weight="800" fill="#2ecc71">64%</text><text x="620" y="540" font-size="15" fill="#9aa7bd">of 72 match results</text>
+<text x="880" y="512" font-size="30" font-weight="800" fill="#2ecc71">56%</text><text x="880" y="540" font-size="15" fill="#9aa7bd">backtest (2018/22)</text>
+
+<text x="60" y="620" font-size="16" fill="#5f6b80">ELO · Dixon-Coles · XGBoost · LightGBM · Neural Net · Logistic · Stakes → ensemble + market blend</text>
+</svg>

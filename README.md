@@ -20,6 +20,18 @@
 
 ---
 
+## 🏆 Final result (tournament over)
+
+Predictions were locked in **before the knockouts** — and the model called the podium:
+
+<div align="center"><img src="docs/final_summary.png" alt="World Cup 2026 — model vs reality" width="92%"></div>
+
+> ✅ **Champion — Spain** · ✅ **Runner-up — Argentina** · ✅ **Final Four — Spain · France · England · Argentina (4/4)**
+>
+> Plus 9/12 group winners and 78% of qualifiers. Full breakdown → [`FINAL_SUMMARY.md`](FINAL_SUMMARY.md).
+
+---
+
 ## ✨ Highlights
 
 - **9 models → one ensemble** — statistics (ELO, Dynamic ELO, Dixon-Coles, Historical Average), gradient boosting (XGBoost, LightGBM), a neural network, logistic regression, and a group-context "stakes" model.
